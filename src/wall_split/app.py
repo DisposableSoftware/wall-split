@@ -3,7 +3,7 @@ from gi.repository import Gtk, Gdk, Gio
 
 from wall_split.pairings import viable_pairings, Pairing
 from wall_split.preview import PreviewArea
-from wall_split.dnd import setup_drop_target
+from wall_split.dnd import setup_drop_target, load_file
 from wall_split.export import show_export_dialog
 from wall_split.split import cut_x_for_left_ratio, right_ratio_for_cut
 
@@ -165,11 +165,18 @@ class SplitWindow(Gtk.ApplicationWindow):
 
 class WallSplitApp(Gtk.Application):
     def __init__(self):
-        super().__init__(application_id="lol.weston.wall-split", flags=Gio.ApplicationFlags.FLAGS_NONE)
+        super().__init__(application_id="lol.weston.wall-split", flags=Gio.ApplicationFlags.HANDLES_OPEN)
+
+    def _window(self) -> SplitWindow:
+        return self.get_active_window() or SplitWindow(self)
 
     def do_activate(self):
-        if not self.get_active_window():
-            win = SplitWindow(self)
+        self._window().present()
+
+    def do_open(self, files, n_files, hint):
+        win = self._window()
+        if files:
+            load_file(files[0], win._on_image_loaded)
         win.present()
 
 

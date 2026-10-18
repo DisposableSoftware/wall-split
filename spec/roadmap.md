@@ -2,7 +2,6 @@
 
 The order of approved work: `planned` requirements, and `partial` ones with a known bug from `/bug`. Change it here when priorities change. `/implement` works through this file: the verification backlog first, then the requirements in the order listed.
 
-2. `WIN-9`: open a file from the command line, so headless checks can load an image.
 3. `WIN-5`: scale the preview to fit.
 4. `WIN-7`: slider in whole pixels, shown as a ratio, with a "Custom" dropdown entry.
 5. `WIN-4`: a visible cue when a drop is rejected.

@@ -42,10 +42,10 @@ The flake only sees git-tracked files. Run `git add` on new files before `nix bu
 Keep this table current: one line per module, with the spec IDs it implements.
 
 ```
-src/wall_split/app.py       Gtk.Application, the window, cut state and controls   WIN-1, WIN-2, WIN-6, WIN-7, WIN-8
+src/wall_split/app.py       Gtk.Application, the window, cut state and controls   WIN-1, WIN-2, WIN-6, WIN-7, WIN-8, WIN-9
 src/wall_split/split.py     split math, no GTK                                    SPLIT-1, SPLIT-2
 src/wall_split/pairings.py  common ratios and the pairing list, no GTK            SPLIT-3, SPLIT-4, SPLIT-5
-src/wall_split/dnd.py       drop target, MIME check, image load                   WIN-3, WIN-4
+src/wall_split/dnd.py       drop target, MIME check, image load                   WIN-3, WIN-4, WIN-9
 src/wall_split/preview.py   preview drawing area and cut line                     WIN-5
 src/wall_split/export.py    save dialog, PNG writing, error alert                 EXP
 src/wall_split/__main__.py  `python -m wall_split`                                INT-2
@@ -80,7 +80,7 @@ Run checks with `./scripts/manual/headless.sh ./scripts/manual/<name>.sh`. It st
 - The output defaults to 3840×2160 at scale 2. Set `HEADLESS_RES` and `HEADLESS_SCALE` to test other scales. Windows float, so they open at their default size.
 - Send screenshots (`shot`, into `$OUT`) to the user when a change is visual.
 - Headless sway drops the first key after `wtype` loads its keymap; `keys` sends a Shift tap first to absorb it.
-- The headless runner can't drag a file into the window. Drag-and-drop checks (`WIN-3`, `WIN-4`) need a real Hyprland session.
+- The headless runner can't drag a file into the window. Load images from the command line (`WIN-9`); only the drag itself needs a real Hyprland session.
 - In headless mode `hyprctl` only answers `cursorpos` and `monitors`; anything else, and `ydotool`, fails instead of reaching the real session.
 
 ### On Hyprland

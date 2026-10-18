@@ -19,7 +19,8 @@ rescaled: every pixel of the source ends up in exactly one of the two outputs.
 
 ## Features
 
-- **Drag and drop:** drop an image on the window to load it.
+- **Drag and drop:** drop an image on the window to load it, or start it with
+  `wall-split image.png`.
 - **Pairings:** it lists the monitor ratio pairs that fit the image (16:9 + 16:9,
   16:9 + 32:9, …), with 16:9 + 16:9 first when the image is close to 32:9.
 - **A slider** for when no pairing fits, or you just want the cut somewhere else.

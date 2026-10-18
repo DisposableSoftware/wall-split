@@ -12,8 +12,10 @@ def _on_drop(widget, value: Gdk.FileList, x, y, on_image_loaded):
     files = value.get_files()
     if not files:
         return False
+    return load_file(files[0], on_image_loaded)
 
-    file = files[0]
+
+def load_file(file: Gio.File, on_image_loaded) -> bool:
     content_type = Gio.content_type_guess(file.get_basename(), None)[0]
 
     if not content_type.startswith("image/"):
