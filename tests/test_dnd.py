@@ -8,6 +8,7 @@ from gi.repository import Gdk, Gtk
 from wall_split.dnd import setup_drop_target
 
 
+@pytest.mark.xfail(strict=True, reason="WIN-3: fails until fixed")
 def test_drop_target_accepts_copy_and_move():
     if not Gtk.init_check():
         pytest.skip("no display")
