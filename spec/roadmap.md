@@ -5,7 +5,6 @@ The order of approved work: `planned` requirements, and `partial` ones with a kn
 3. `WIN-5`: scale the preview to fit.
 4. `WIN-7`: slider in whole pixels, shown as a ratio, with a "Custom" dropdown entry.
 5. `WIN-4`: a visible cue when a drop is rejected.
-6. `WIN-1`: request GTK 4 explicitly.
 8. `PROD-4`: load and save asynchronously.
 9. `INT-2`: a plain `python -m wall_split` entry point.
 

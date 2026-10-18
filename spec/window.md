@@ -4,7 +4,7 @@
 
 | ID | Requirement | Status | Verified by |
 |----|-------------|--------|-------------|
-| `WIN-1` | Starting the app opens one GTK 4 window titled "Wall Split", 960×640 logical px by default. Its header bar shows "No image loaded" and a disabled "Export..." button, and the body shows "Drag and drop an image here" centred. | partial: not verified; GTK is imported without `gi.require_version`, so GTK 3 can load if its typelib comes first | manual |
+| `WIN-1` | Starting the app opens one GTK 4 window titled "Wall Split", 960×640 logical px by default. Its header bar shows "No image loaded" and a disabled "Export..." button, and the body shows "Drag and drop an image here" centred. | done | `scripts/manual/smoke.sh` (headless: title, 960×640, no PyGIWarning; screenshot) |
 | `WIN-2` | The window has the Wayland app ID `io.github.DisposableSoftware.WallSplit`, so compositor window rules match it. | done | `scripts/manual/smoke.sh` (headless: `swaymsg` reports the app ID) |
 | `WIN-3` | Dropping a file whose content is an image loads it: the header shows the file name, the preview replaces the hint, the pairings are recomputed (`SPLIT-4`), the cut moves to the default (`SPLIT-5`, `SPLIT-6`) and Export is enabled. | partial: the content type is guessed from the file name only; not verified | manual on Hyprland (drag from a file manager) |
 | `WIN-4` | Dropping anything else (a non-image, or an image that fails to decode) is rejected with a visible cue, and the loaded image and cut stay as they were. | partial: rejected, but with no cue | manual on Hyprland |
