@@ -1,5 +1,8 @@
-.build/
-.swiftpm/
-Package.resolved
-result
+__pycache__/
+*.pyc
+.pytest_cache/
+dist/
+*.egg-info/
+/result*
 .direnv/
+/.claude/settings.local.json
