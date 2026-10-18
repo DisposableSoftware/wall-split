@@ -7,7 +7,7 @@ gi.require_version("Gdk", "4.0")
 
 from gi.repository import Gtk, Gdk, Gio
 
-from wall_split.pairings import viable_pairings, Pairing
+from wall_split.pairings import viable_pairings, pairing_index_for_cut, Pairing
 from wall_split.preview import PreviewArea
 from wall_split.dnd import setup_drop_target, load_file
 from wall_split.export import show_export_dialog
@@ -75,8 +75,10 @@ class SplitWindow(Gtk.ApplicationWindow):
 
         controls_box.append(pairing_row)
 
-        self.slider = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, 1, 0.01)
-        self.slider.set_digits(4)
+        self.slider = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, 1, 1)
+        self.slider.set_digits(0)
+        self.slider.set_draw_value(True)
+        self.slider.set_format_value_func(self._format_slider_value)
         self.slider.set_hexpand(True)
         self.slider.connect("value-changed", self._on_slider_changed)
         controls_box.append(self.slider)
@@ -92,16 +94,17 @@ class SplitWindow(Gtk.ApplicationWindow):
 
         self.file_label.set_text(gio_file.get_basename())
 
+        self.slider.set_range(1, max(self.source_w - 1, 1))
+        self.slider.set_increments(1, max(self.source_w // 100, 1))
+
         self.pairings = viable_pairings(self.source_w, self.source_h)
         self._refresh_dropdown()
 
-        # Default cut: first pairing or center
         if self.pairings:
             self.cut_x = self.pairings[0].cut_x
         else:
             self.cut_x = self.source_w // 2
 
-        self.slider.set_range(1, max(self.source_w - 1, 1))
         self.slider.set_value(self.cut_x)
 
         self.preview.set_image(pixbuf, self.cut_x, self.source_w)
@@ -110,11 +113,8 @@ class SplitWindow(Gtk.ApplicationWindow):
         self._update_ratio_labels()
 
     def _refresh_dropdown(self):
-        items = []
-        for p in self.pairings:
-            items.append(f"{p.left_label} + {p.right_label}")
-        if not items:
-            items.append("Custom")
+        items = [f"{p.left_label} + {p.right_label}" for p in self.pairings]
+        items.append("Custom")
 
         self.pairing_model = Gtk.StringList.new(items)
         self.pairing_dropdown.set_model(self.pairing_model)
@@ -130,26 +130,18 @@ class SplitWindow(Gtk.ApplicationWindow):
             self._update_ratio_labels()
 
     def _on_slider_changed(self, slider):
-        val = slider.get_value()
-        new_x = max(1, min(int(val), self.source_w - 1))
+        new_x = max(1, min(round(slider.get_value()), self.source_w - 1))
         if new_x != self.cut_x:
             self.cut_x = new_x
             self.preview.set_image(self.pixbuf, self.cut_x, self.source_w)
 
-        # Check if slider position matches a pairing — if not, select "Custom"
-        match = False
-        for i, p in enumerate(self.pairings):
-            if p.cut_x == self.cut_x:
-                self.pairing_dropdown.set_selected(i)
-                match = True
-                break
-
-        if not match and len(self.pairings):
-            # Select the "Custom" entry (last position if we appended it, but our model doesn't have it by default)
-            # Instead just update labels to show custom ratios
-            pass
-
+        self.pairing_dropdown.set_selected(pairing_index_for_cut(self.pairings, self.cut_x))
         self._update_ratio_labels()
+
+    def _format_slider_value(self, scale, value):
+        if not self.source_h:
+            return ""
+        return f"{round(value) / self.source_h:.2f}"
 
     def _update_ratio_labels(self):
         if not self.pixbuf:

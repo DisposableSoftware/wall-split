@@ -47,3 +47,11 @@ def viable_pairings(W: int, H: int, tolerance: float = 0.02) -> list[Pairing]:
             break
 
     return pairings
+
+
+def pairing_index_for_cut(pairings: list[Pairing], cut_x: int) -> int:
+    """Index of the pairing at *cut_x*, or len(pairings) for the "Custom" entry after them."""
+    for i, p in enumerate(pairings):
+        if p.cut_x == cut_x:
+            return i
+    return len(pairings)

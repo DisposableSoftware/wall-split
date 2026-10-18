@@ -1,4 +1,4 @@
-from wall_split.pairings import viable_pairings, COMMON_RATIOS, Pairing
+from wall_split.pairings import viable_pairings, pairing_index_for_cut, COMMON_RATIOS, Pairing
 
 
 def test_32_over_9_gets_169_plus_169():
@@ -55,3 +55,14 @@ def test_right_side_beyond_two_percent_does_not_match():
 
 def test_square_source_has_no_pairings():
     assert viable_pairings(1000, 1000) == []
+
+
+def test_cut_on_a_pairing_selects_it():
+    pairings = viable_pairings(5120, 1440)
+    assert pairing_index_for_cut(pairings, pairings[1].cut_x) == 1
+
+
+def test_cut_off_every_pairing_selects_custom():
+    pairings = viable_pairings(5120, 1440)
+    assert pairing_index_for_cut(pairings, 2561) == len(pairings)
+    assert pairing_index_for_cut([], 500) == 0
