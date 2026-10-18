@@ -17,13 +17,10 @@ def _on_drop(widget, value: Gdk.FileList, x, y, on_image_loaded, on_rejected):
 
 
 def load_file(file: Gio.File, on_image_loaded, on_rejected) -> bool:
-    """Returns False at once for a non-image name; a decode failure arrives later as on_rejected."""
-    content_type = Gio.content_type_guess(file.get_basename(), None)[0]
+    """Accepts at once; a file that isn't an image arrives later as on_rejected."""
 
-    if not content_type.startswith("image/"):
-        on_rejected()
-        return False
-
+    # GdkPixbuf picks its loader from the file's leading bytes, so the name plays no part:
+    # anything that isn't an image fails to decode.
     def on_decoded(_source, result):
         try:
             pixbuf = GdkPixbuf.Pixbuf.new_from_stream_finish(result)

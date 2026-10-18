@@ -45,7 +45,7 @@ Keep this table current: one line per module, with the spec IDs it implements.
 src/wall_split/app.py       Gtk.Application, the window, cut state and controls   WIN-1, WIN-2, WIN-6, WIN-7, WIN-8, WIN-9
 src/wall_split/split.py     split math, no GTK                                    SPLIT-1, SPLIT-2
 src/wall_split/pairings.py  common ratios, the pairing list, dropdown index, no GTK SPLIT-3, SPLIT-4, SPLIT-5, WIN-7
-src/wall_split/dnd.py       drop target, MIME check, image load                   WIN-3, WIN-4, WIN-9
+src/wall_split/dnd.py       drop target, async image load                          WIN-3, WIN-4, WIN-9
 src/wall_split/preview.py   preview drawing area and cut line                     WIN-5
 src/wall_split/export.py    save dialog, PNG writing, error alert                 EXP
 src/wall_split/__main__.py  `python -m wall_split`                                INT-2
@@ -55,7 +55,7 @@ scripts/manual/             UI checks (lib.sh helpers; headless.sh runs one in a
   smoke.sh                  window, app ID, opening files                         WIN-1, WIN-2, WIN-9
   preview.sh                preview fits the image, cut line placement           WIN-5
   slider.sh                 dropdown, slider and labels stay in sync              WIN-3, WIN-6, WIN-7, WIN-8, SPLIT-6
-  rejected.sh               red border on a rejected file, state kept             WIN-4
+  rejected.sh               red border on a rejected file, state kept; content    WIN-3, WIN-4
   export.sh                 export through the save dialog, outputs vs source     EXP, PROD-4
 spec/                       the specification
 ```
