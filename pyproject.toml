@@ -1,8 +1,18 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "wall-split"
 version = "0.1.0"
-description = "Split a single wallpaper for dual monitors"
+description = "Cuts one wide wallpaper into two, for two monitors"
 requires-python = ">=3.11"
 
 [project.scripts]
 wall-split = "wall_split.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

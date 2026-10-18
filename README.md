@@ -33,13 +33,10 @@ has the honest list.
 You need Nix with flakes enabled.
 
 ```sh
-git clone https://github.com/DisposableSoftware/wall-split
-cd wall-split
-nix develop
-cd src && python -m wall_split
+nix run github:DisposableSoftware/wall-split
 ```
 
-There is no Nix package yet, so no `nix run`.
+Or from a checkout, `nix build` gives you `./result/bin/wall-split`.
 
 ## Development
 

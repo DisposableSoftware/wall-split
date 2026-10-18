@@ -31,9 +31,11 @@ When reporting to the user, say plainly if something could only be partly verifi
 nix develop                    # devshell: python with pygobject and pytest, gtk4
 pytest                         # unit tests (inside the devshell)
 cd src && python -m wall_split # run (inside the devshell)
+nix build                      # package -> ./result/bin/wall-split (also runs the tests)
+nix flake check
 ```
 
-The flake only sees git-tracked files. Run `git add` on new files before `nix build` or `nix develop`.
+The flake only sees git-tracked files. Run `git add` on new files before `nix build` or `nix develop`. `nix/package.nix` reads the name and version from `pyproject.toml`.
 
 ## Code layout
 
@@ -48,6 +50,7 @@ src/wall_split/preview.py   preview drawing area and cut line                   
 src/wall_split/export.py    save dialog, PNG writing, error alert                 EXP
 src/wall_split/__main__.py  `python -m wall_split`                                INT-2
 tests/                      pytest unit tests for the GTK-free modules
+nix/package.nix             buildPythonApplication, wrapped by wrapGAppsHook4     INT-3
 scripts/manual/             UI checks (lib.sh helpers; headless.sh runs one in a headless sway)
 spec/                       the specification
 ```
