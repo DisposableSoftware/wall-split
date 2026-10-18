@@ -10,6 +10,7 @@ This folder is the source of truth for what Wall Split does. The code implements
 | [split.md](split.md) | `SPLIT` | The cut: split math, common ratios, pairings |
 | [window.md](window.md) | `WIN` | The window, drag-and-drop, preview and controls |
 | [export.md](export.md) | `EXP` | Writing the two output images |
+| [appearance.md](appearance.md) | `LOOK` | The app icon |
 | [integration.md](integration.md) | `INT` | Nix, launching |
 | [roadmap.md](roadmap.md) | — | The order of planned work, which `/implement` follows |
 
