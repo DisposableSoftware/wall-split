@@ -11,4 +11,4 @@ Built requirements that are not fully verified. Clear these before starting new 
 - `SPLIT-6`: default cut when nothing fits.
 - `WIN-3`: load.
 - `WIN-4`: drag a text file onto the window on Hyprland and see the red border.
-- `EXP-1`, `EXP-2`, `EXP-3`: export naming, pixels and errors.
+- `EXP-3`: the error alert never appears (see the row); needs `/bug`.
