@@ -11,7 +11,7 @@ The split is non-destructive on the whole image. The controls move one vertical 
 | `SPLIT-3` | The common monitor ratios are 16:9, 21:9, 16:10, 4:3, 5:4, 32:9 and 1:1. | done | `tests/test_pairings.py::test_common_ratios` |
 | `SPLIT-4` | The pairings for a source are found by taking each common ratio as the left side and keeping it when the implied right ratio is within ±2% (relative) of a common ratio, which names the right side. | done | `tests/test_pairings.py::test_right_side_within_two_percent_matches`, `test_right_side_beyond_two_percent_does_not_match`, `test_square_source_has_no_pairings` |
 | `SPLIT-5` | When 16:9 + 16:9 is a pairing (the source is within tolerance of 32:9), it is listed first and is the default. | done | `tests/test_pairings.py::test_32_over_9_gets_169_plus_169`, `test_prefers_169_at_top` |
-| `SPLIT-6` | When no pairing fits, the default cut is `W/2` (rounded down). | partial: built, not verified | manual |
+| `SPLIT-6` | When no pairing fits, the default cut is `W/2` (rounded down). | done | `scripts/manual/slider.sh` (headless: a 1001×1000 image opens with "Custom" and 500 | 501) |
 
 ## Implementation notes
 
