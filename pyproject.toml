@@ -1,0 +1,8 @@
+[project]
+name = "wall-split"
+version = "0.1.0"
+description = "Split a single wallpaper for dual monitors"
+requires-python = ">=3.11"
+
+[project.scripts]
+wall-split = "wall_split.app:main"
