@@ -2,7 +2,7 @@
 
 The order of approved work: `planned` requirements, and `partial` ones with a known bug from `/bug`. Change it here when priorities change. `/implement` works through this file: the verification backlog first, then the requirements in the order listed.
 
-1. `WIN-3`, `WIN-4`: accept drops offered as a move, so drags from a file manager work on Hyprland.
+Nothing is planned.
 
 
 ## Verification backlog

@@ -2,7 +2,7 @@ from gi.repository import Gtk, Gdk, Gio, GLib, GdkPixbuf
 
 
 def setup_drop_target(widget: Gtk.Widget, on_image_loaded, on_rejected) -> Gtk.DropTarget:
-    target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY)
+    target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
     target.connect("drop", _on_drop, on_image_loaded, on_rejected)
     widget.add_controller(target)
     return target
