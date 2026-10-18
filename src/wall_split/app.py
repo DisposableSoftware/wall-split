@@ -5,7 +5,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
 
-from gi.repository import Gtk, Gdk, Gio
+from gi.repository import Gtk, Gdk, Gio, GLib
 
 from wall_split.pairings import viable_pairings, pairing_index_for_cut, Pairing
 from wall_split.preview import PreviewArea
@@ -14,9 +14,18 @@ from wall_split.export import show_export_dialog
 from wall_split.split import cut_x_for_left_ratio, right_ratio_for_cut
 
 
+REJECT_CSS = b".rejected { outline: 3px solid #e01b24; outline-offset: -3px; }"
+REJECT_FLASH_MS = 1500
+
+
 class SplitWindow(Gtk.ApplicationWindow):
     def __init__(self, app, **kwargs):
         super().__init__(application=app, title="Wall Split", default_width=960, default_height=640, **kwargs)
+
+        css = Gtk.CssProvider()
+        css.load_from_bytes(GLib.Bytes.new(REJECT_CSS))
+        Gtk.StyleContext.add_provider_for_display(self.get_display(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        self._reject_timeout = 0
 
         self.source_w = 0
         self.source_h = 0
@@ -52,7 +61,7 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.stack.add_named(self.preview, "preview")
 
         self.stack.set_visible_child_name("hint")
-        setup_drop_target(self.stack, self._on_image_loaded)
+        setup_drop_target(self.stack, self._on_image_loaded, self._on_rejected)
 
         # Controls row
         controls_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -86,6 +95,17 @@ class SplitWindow(Gtk.ApplicationWindow):
         main_box.append(self.stack)
         main_box.append(controls_box)
         self.set_child(main_box)
+
+    def _on_rejected(self):
+        self.stack.add_css_class("rejected")
+        if self._reject_timeout:
+            GLib.source_remove(self._reject_timeout)
+        self._reject_timeout = GLib.timeout_add(REJECT_FLASH_MS, self._end_reject_flash)
+
+    def _end_reject_flash(self):
+        self.stack.remove_css_class("rejected")
+        self._reject_timeout = 0
+        return GLib.SOURCE_REMOVE
 
     def _on_image_loaded(self, pixbuf, gio_file):
         self.pixbuf = pixbuf
@@ -174,7 +194,7 @@ class WallSplitApp(Gtk.Application):
     def do_open(self, files, n_files, hint):
         win = self._window()
         if files:
-            load_file(files[0], win._on_image_loaded)
+            load_file(files[0], win._on_image_loaded, win._on_rejected)
         win.present()
 
 
