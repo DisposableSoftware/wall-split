@@ -9,7 +9,7 @@ Wall Split splits one wallpaper image into two images for a dual-monitor setup. 
 | `PROD-1` | Lightweight and minimal: plain GTK 4 widgets, no libadwaita, a short dependency list (PyGObject and GdkPixbuf; no Pillow). | done (ongoing constraint) |
 | `PROD-2` | Portable across desktops: no dependency on GNOME services. Hyprland is the primary target. | done (ongoing constraint) |
 | `PROD-3` | Simple toolchain: Python and pytest inside a Nix devshell, nothing else. | done |
-| `PROD-4` | The main loop never blocks on file I/O: loading the dropped image and writing the PNGs are asynchronous. | partial: `dnd.py` loads with `Pixbuf.new_from_file` and `export.py` saves with `savev`, both synchronously on the main loop |
+| `PROD-4` | The main loop never blocks on file I/O: loading the dropped image and writing the PNGs are asynchronous. | done (ongoing constraint; loading uses `Gio.File.read_async` and `Pixbuf.new_from_stream_async`, saving `replace_async` and `save_to_streamv_async`; checked by review and the manual scripts, not by timing) |
 
 ## Non-goals
 

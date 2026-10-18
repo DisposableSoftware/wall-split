@@ -56,6 +56,7 @@ scripts/manual/             UI checks (lib.sh helpers; headless.sh runs one in a
   preview.sh                preview fits the image, cut line placement           WIN-5
   slider.sh                 dropdown, slider and labels stay in sync              WIN-6, WIN-7, WIN-8
   rejected.sh               red border on a rejected file, state kept             WIN-4
+  export.sh                 export through the save dialog, outputs vs source     EXP, PROD-4
 spec/                       the specification
 ```
 
