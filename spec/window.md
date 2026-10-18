@@ -12,6 +12,7 @@
 | `WIN-6` | The pairing dropdown lists each pairing as "L + R" (e.g. "16:9 + 16:9"). Selecting one moves the cut to it and updates the slider, preview and size labels. | partial: built, not verified | manual |
 | `WIN-7` | The slider moves the cut in whole source pixels over `[1, W−1]`, so neither output is empty, and shows its position as the left-side ratio. The slider, dropdown, preview and labels stay in sync: when the cut matches no pairing, the dropdown shows "Custom". | partial: the slider shows the raw pixel value with 4 decimals, and there is no "Custom" entry, so the dropdown keeps the last pairing | manual |
 | `WIN-8` | Two labels show each side's size in pixels and its ratio to 2 decimals (e.g. "Left: 2560×1440 (1.78)"), updated as the cut moves. | partial: built, not verified | manual |
+| `WIN-9` | `wall-split FILE` loads `FILE` as if it had been dropped on the window (`WIN-3`, `WIN-4`). If the app is already running, the file loads in its window. With several files, only the first is used. | planned | headless (`scripts/manual/smoke.sh`) |
 
 ## Implementation notes
 
