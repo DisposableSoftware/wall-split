@@ -52,6 +52,7 @@ src/wall_split/__main__.py  `python -m wall_split`                              
 tests/                      pytest unit tests for the GTK-free modules
 nix/package.nix             buildPythonApplication, wrapped by wrapGAppsHook4     INT-3
 scripts/manual/             UI checks (lib.sh helpers; headless.sh runs one in a headless sway)
+  smoke.sh                  window, app ID, opening files                         WIN-1, WIN-2, WIN-9
 spec/                       the specification
 ```
 

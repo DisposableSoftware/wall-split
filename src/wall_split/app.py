@@ -165,7 +165,7 @@ class SplitWindow(Gtk.ApplicationWindow):
 
 class WallSplitApp(Gtk.Application):
     def __init__(self):
-        super().__init__(application_id="lol.weston.wall-split", flags=Gio.ApplicationFlags.HANDLES_OPEN)
+        super().__init__(application_id="io.github.DisposableSoftware.WallSplit", flags=Gio.ApplicationFlags.HANDLES_OPEN)
 
     def _window(self) -> SplitWindow:
         return self.get_active_window() or SplitWindow(self)
