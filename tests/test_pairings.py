@@ -37,3 +37,21 @@ def test_prefers_169_at_top():
     has_169 = any(p.left_label == "16:9" and p.right_label == "16:9" for p in pairings)
     if has_169:
         assert pairings[0].left_label == "16:9" and pairings[0].right_label == "16:9"
+
+
+def _has(pairings, left, right):
+    return any(p.left_label == left and p.right_label == right for p in pairings)
+
+
+def test_right_side_within_two_percent_matches():
+    # Left 16:9 at H=1000 is x=1778; a right side of 1812 px is 1.9% above 16:9.
+    assert _has(viable_pairings(1778 + 1812, 1000), "16:9", "16:9")
+
+
+def test_right_side_beyond_two_percent_does_not_match():
+    # 1815 px is 2.1% above 16:9.
+    assert not _has(viable_pairings(1778 + 1815, 1000), "16:9", "16:9")
+
+
+def test_square_source_has_no_pairings():
+    assert viable_pairings(1000, 1000) == []
