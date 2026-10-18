@@ -42,12 +42,16 @@ class PreviewArea(Gtk.DrawingArea):
         offset_x = (width - draw_w) / 2
         offset_y = (height - draw_h) / 2
 
-        Gdk.cairo_set_source_pixbuf(cr, da.pixbuf, offset_x, offset_y)
+        cr.save()
+        cr.translate(offset_x, offset_y)
+        cr.scale(scale, scale)
+        Gdk.cairo_set_source_pixbuf(cr, da.pixbuf, 0, 0)
         cr.paint()
+        cr.restore()
 
-        cut_screen_x = offset_x + int(da.cut_x_frac * draw_w)
+        cut_screen_x = offset_x + da.cut_x_frac * draw_w
         cr.set_source_rgb(1.0, 0.0, 0.0)
         cr.set_line_width(2)
-        cr.move_to(cut_screen_x, 0)
-        cr.line_to(cut_screen_x, height)
+        cr.move_to(cut_screen_x, offset_y)
+        cr.line_to(cut_screen_x, offset_y + draw_h)
         cr.stroke()
