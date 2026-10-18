@@ -11,5 +11,5 @@ The order of approved work: `planned` requirements, and `partial` ones with a kn
 Built requirements that are not fully verified. Clear these before starting new planned work. The manual checks need `INT-3` and `WIN-9` first: the headless runner can't drag a file, so they load images from the command line. Only the drag itself needs a real Hyprland session.
 
 - `SPLIT-6`: default cut when nothing fits.
-- `WIN-3`, `WIN-6`, `WIN-8`: load, dropdown and labels.
+- `WIN-3`: load.
 - `EXP-1`, `EXP-2`, `EXP-3`: export naming, pixels and errors.
