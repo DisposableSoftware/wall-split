@@ -49,7 +49,8 @@ src/wall_split/dnd.py       drop target, async image load                       
 src/wall_split/preview.py   preview drawing area and cut line                     WIN-5
 src/wall_split/export.py    save dialog, PNG writing, error alert                 EXP
 src/wall_split/__main__.py  `python -m wall_split`                                INT-2
-tests/                      pytest unit tests for the GTK-free modules
+tests/                      pytest unit tests (GTK ones skip without a display)
+tests/assets/               images and impostor files for manual checks (README)
 nix/package.nix             buildPythonApplication, wrapped by wrapGAppsHook4     INT-3
 scripts/manual/             UI checks (lib.sh helpers; headless.sh runs one in a headless sway)
   smoke.sh                  window, app ID, opening files                         WIN-1, WIN-2, WIN-9
