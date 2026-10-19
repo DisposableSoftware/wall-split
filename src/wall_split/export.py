@@ -64,5 +64,5 @@ def _stem(name: str) -> str:
 
 
 def _show_error(window: Gtk.ApplicationWindow, message: str) -> None:
-    dialog = Gtk.AlertDialog.new(message)
+    dialog = Gtk.AlertDialog(message=message)
     dialog.show(window)
