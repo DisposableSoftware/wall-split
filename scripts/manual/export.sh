@@ -25,10 +25,10 @@ dialog_keys() {
   sleep 0.6
 }
 
-# export_to PATH: opens Export (the second Tab stop) and saves as PATH.
+# export_to PATH: opens Export (the fourth Tab stop, after Split and Crop) and saves as PATH.
 export_to() {
   focus_app; sleep 0.3
-  keys -k Tab -k Tab
+  keys -k Tab -k Tab -k Tab -k Tab
   keys -k space
   sleep 1
   check "the save dialog opened" 2 "$(all_wins | jq length)"

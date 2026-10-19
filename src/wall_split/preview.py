@@ -7,7 +7,12 @@ class PreviewArea(Gtk.DrawingArea):
         super().__init__(*args, **kwargs)
         self.pixbuf = None
         self.cut_x_frac = 0.5
+        self.mode = "split"
         self.set_draw_func(self._draw)
+
+    def set_mode(self, mode: str):
+        self.mode = mode
+        self.queue_draw()
 
     def set_image(self, pixbuf: GdkPixbuf.Pixbuf, cut_x: int, source_w: int):
         self.pixbuf = pixbuf
@@ -48,6 +53,9 @@ class PreviewArea(Gtk.DrawingArea):
         Gdk.cairo_set_source_pixbuf(cr, da.pixbuf, 0, 0)
         cr.paint()
         cr.restore()
+
+        if da.mode != "split":
+            return
 
         cut_screen_x = offset_x + da.cut_x_frac * draw_w
         cr.set_source_rgb(1.0, 0.0, 0.0)

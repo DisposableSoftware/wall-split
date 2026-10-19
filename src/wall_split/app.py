@@ -12,6 +12,7 @@ from wall_split.preview import PreviewArea
 from wall_split.dnd import setup_drop_target, load_file
 from wall_split.export import show_export_dialog
 from wall_split.split import cut_x_for_left_ratio, right_ratio_for_cut
+from wall_split.crop import DEFAULT_MONITOR, MAX_MONITOR_SIDE
 
 
 REJECT_CSS = b".rejected { outline: 3px solid #e01b24; outline-offset: -3px; }"
@@ -33,8 +34,17 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.cut_x = 0
         self.pairings: list[Pairing] = []
 
+        self.mode = "split"
+
         header = Gtk.HeaderBar()
         header.set_show_title_buttons(True)
+        self.split_btn = Gtk.ToggleButton(label="Split", active=True)
+        self.crop_btn = Gtk.ToggleButton(label="Crop", group=self.split_btn)
+        self.crop_btn.connect("toggled", self._on_mode_toggled)
+        mode_box = Gtk.Box(css_classes=["linked"])
+        mode_box.append(self.split_btn)
+        mode_box.append(self.crop_btn)
+        header.pack_start(mode_box)
         self.file_label = Gtk.Label(label="No image loaded", halign=Gtk.Align.START)
         header.pack_start(self.file_label)
 
@@ -63,12 +73,15 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.stack.set_visible_child_name("hint")
         setup_drop_target(self.stack, self._on_image_loaded, self._on_rejected)
 
-        # Controls row
+        self.controls_stack = Gtk.Stack()
+        self.controls_stack.set_margin_top(12)
+        self.controls_stack.set_margin_bottom(12)
+        self.controls_stack.set_margin_start(12)
+        self.controls_stack.set_margin_end(12)
+
         controls_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        controls_box.set_margin_top(12)
-        controls_box.set_margin_bottom(12)
-        controls_box.set_margin_start(12)
-        controls_box.set_margin_end(12)
+        self.controls_stack.add_named(controls_box, "split")
+        self.controls_stack.add_named(self._build_crop_controls(), "crop")
 
         pairing_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         self.pairing_model = Gtk.StringList()
@@ -93,8 +106,32 @@ class SplitWindow(Gtk.ApplicationWindow):
         controls_box.append(self.slider)
 
         main_box.append(self.stack)
-        main_box.append(controls_box)
+        main_box.append(self.controls_stack)
         self.set_child(main_box)
+
+    def _build_crop_controls(self) -> Gtk.Widget:
+        row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6, valign=Gtk.Align.CENTER)
+        self.monitor_fields = []
+        for side, (w, h) in (("Left", DEFAULT_MONITOR), ("Right", DEFAULT_MONITOR)):
+            if side == "Right":
+                row.append(Gtk.Separator(orientation=Gtk.Orientation.VERTICAL, margin_start=6, margin_end=6))
+            row.append(Gtk.Label(label=side))
+            width = Gtk.SpinButton.new_with_range(1, MAX_MONITOR_SIDE, 1)
+            height = Gtk.SpinButton.new_with_range(1, MAX_MONITOR_SIDE, 1)
+            width.set_value(w)
+            height.set_value(h)
+            row.append(width)
+            row.append(Gtk.Label(label="×"))
+            row.append(height)
+            self.monitor_fields.append((width, height))
+        self.box_label = Gtk.Label(label="Box: —", halign=Gtk.Align.END, hexpand=True)
+        row.append(self.box_label)
+        return row
+
+    def _on_mode_toggled(self, button):
+        self.mode = "crop" if self.crop_btn.get_active() else "split"
+        self.controls_stack.set_visible_child_name(self.mode)
+        self.preview.set_mode(self.mode)
 
     def _on_rejected(self):
         self.stack.add_css_class("rejected")

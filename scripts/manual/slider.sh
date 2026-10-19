@@ -21,8 +21,8 @@ magick -size 1001x1000 gradient:green-yellow "$T/square.png"
 
 launch "" "$T/wide.png"
 shot "$OUT/1-loaded.png"
-# Focus order: the third Tab reaches the dropdown, the next the slider.
-keys -k Tab -k Tab -k Tab
+# Focus order: Split, Crop and Export come first; the fifth Tab reaches the dropdown.
+keys -k Tab -k Tab -k Tab -k Tab -k Tab
 keys -k space
 keys -k Down
 keys -k Return
