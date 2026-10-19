@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p wtype jq grim imagemagick
-# Spec: WIN-1, WIN-2, WIN-9.
+# Spec: WIN-1, WIN-2, WIN-9, WIN-12.
 # Run from the repo root after `nix build`, with no Wall Split windows open. Screenshots
 # go to $OUT.
 cd "$(dirname "$0")/../.." || exit 1
@@ -24,10 +24,12 @@ shot "$OUT/empty.png"
 "$BIN" "$T/wide.png" >/dev/null 2>&1
 sleep 1
 check "a file opens in the running window (WIN-9)" 1 "$(win_count)"
+check "the title names the file (WIN-12)" "wide.png — Wall Split" "$(wins | jq -r '.[0].title')"
 shot "$OUT/wide.png"
 "$BIN" "$T/other.png" >/dev/null 2>&1
 sleep 1
 check "a second file reuses the window (WIN-9)" 1 "$(win_count)"
+check "the title follows the new file (WIN-12)" "other.png — Wall Split" "$(wins | jq -r '.[0].title')"
 shot "$OUT/other.png"
 
 echo "screenshots in $OUT"

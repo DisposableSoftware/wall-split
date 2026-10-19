@@ -179,6 +179,7 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.pixbuf = pixbuf
         self.source_w = pixbuf.get_width()
         self.source_h = pixbuf.get_height()
+        self.set_title(f"{gio_file.get_basename()} — Wall Split")
 
         self.slider.set_range(1, max(self.source_w - 1, 1))
         self.slider.set_increments(1, max(self.source_w // 100, 1))

@@ -9,7 +9,7 @@
 #   3-custom  one pixel right: dropdown "Custom", "Left: 1801×1440", "Right: 3319×1440"
 #   4-back    one pixel left again: dropdown "5:4 + 21:9", 1800 and 3320
 #   5-square  a 1001×1000 image opened from the command line, which fits no pairing: the
-#             header "square.png", dropdown "Custom", "Left: 500×1000", "Right: 501×1000"
+#             dropdown "Custom", "Left: 500×1000", "Right: 501×1000"
 cd "$(dirname "$0")/../.." || exit 1
 . scripts/manual/lib.sh
 require_no_instance
