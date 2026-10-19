@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Wall Split
+GenericName=Wallpaper Splitter
+Comment=Split one wide wallpaper into two, for two monitors
+Exec=wall-split %f
+Icon=io.github.DisposableSoftware.WallSplit
+Terminal=false
+StartupNotify=true
+StartupWMClass=io.github.DisposableSoftware.WallSplit
+Categories=Graphics;
+Keywords=wallpaper;monitor;split;dual;
