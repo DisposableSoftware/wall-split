@@ -15,6 +15,7 @@ Wall Split turns one wallpaper image into two images for a dual-monitor setup. T
 
 - No libadwaita. It fights custom theming and transparency.
 - No more than two outputs.
+- No header bar, title bar or status bar. The user runs Hyprland barless, as Junk Drawer and Downer do.
 
 ## Out of scope for now
 
