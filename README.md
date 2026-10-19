@@ -43,6 +43,21 @@ rescaled: every pixel of the source ends up in exactly one of the two outputs.
 It is early. [`spec/roadmap.md`](spec/roadmap.md) has what is planned, and [`spec/`](spec/README.md)
 the honest list of what works.
 
+## Configuration
+
+Optional. On first run Wall Split writes `~/.config/wall-split/config.ini` with every
+default commented out. Restart to apply changes.
+
+```ini
+[appearance]
+flavor = mocha    # latte | frappe | macchiato | mocha | gtk
+accent = mauve    # any Catppuccin accent
+opacity = 0.85    # window background alpha, 0.0 to 1.0
+```
+
+`flavor = gtk` follows the GTK theme instead. Extra CSS goes in
+`~/.config/wall-split/style.css`; it can use the palette names (`@base`, `@accent`, …).
+
 ## Running
 
 You need Nix with flakes enabled.
@@ -67,6 +82,11 @@ pytest
 The scripts in [`scripts/manual/`](scripts/manual) drive the app to check what unit tests
 can't. They run in a headless sway (`scripts/manual/headless.sh`), so they work with the
 screen locked.
+
+## Credits
+
+The colours are the [Catppuccin](https://catppuccin.com) palette by the
+[Catppuccin community](https://github.com/catppuccin/catppuccin). We only use it.
 
 ## License
 

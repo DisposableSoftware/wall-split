@@ -1,0 +1,149 @@
+window.wall-split {
+  background-color: @bg;
+  color: @text;
+}
+
+window.wall-split .dim-label {
+  color: @subtext0;
+}
+
+window.wall-split .rejected {
+  outline: 3px solid @red;
+  outline-offset: -3px;
+}
+
+window.wall-split button {
+  background: alpha(@surface0, 0.8);
+  color: @text;
+  border: 1px solid @surface1;
+  border-radius: 8px;
+  box-shadow: none;
+  text-shadow: none;
+  padding: 4px 12px;
+}
+
+window.wall-split button:hover {
+  background-color: alpha(@surface0, 0.6);
+}
+
+window.wall-split button:disabled {
+  color: @overlay0;
+}
+
+window.wall-split button:checked,
+window.wall-split button.suggested-action {
+  background: @accent;
+  color: @base;
+}
+
+window.wall-split button.suggested-action:hover {
+  background: alpha(@accent, 0.85);
+}
+
+window.wall-split button:focus-visible {
+  outline: 1px solid alpha(@accent, 0.7);
+  outline-offset: -1px;
+}
+
+window.wall-split .linked > button:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+window.wall-split .linked > button:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+window.wall-split entry,
+window.wall-split spinbutton {
+  background-color: alpha(@surface0, 0.8);
+  color: @text;
+  border: 1px solid @surface1;
+  border-radius: 8px;
+  box-shadow: none;
+  outline: none;
+}
+
+window.wall-split entry:focus-within,
+window.wall-split spinbutton:focus-within {
+  border-color: @accent;
+}
+
+window.wall-split spinbutton text,
+window.wall-split spinbutton button {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  color: @text;
+}
+
+window.wall-split spinbutton button:hover {
+  background-color: alpha(@surface0, 0.6);
+}
+
+window.wall-split text > selection {
+  background-color: alpha(@accent, 0.35);
+  color: @text;
+}
+
+window.wall-split dropdown > button {
+  min-height: 0;
+}
+
+window.wall-split popover > contents {
+  background-color: @mantle;
+  color: @text;
+  border: 1px solid @surface1;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+window.wall-split popover listview,
+window.wall-split popover list {
+  background: transparent;
+  color: @text;
+}
+
+window.wall-split popover row {
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+window.wall-split popover row:hover {
+  background-color: @surface0;
+}
+
+window.wall-split popover row:selected {
+  background-color: alpha(@accent, 0.3);
+  color: @text;
+}
+
+window.wall-split scale trough {
+  background-color: @surface1;
+  min-height: 6px;
+  border-radius: 3px;
+}
+
+window.wall-split scale highlight {
+  background-color: @accent;
+  border-radius: 3px;
+}
+
+window.wall-split scale slider {
+  background-color: @text;
+  border: none;
+  box-shadow: none;
+  min-width: 16px;
+  min-height: 16px;
+  border-radius: 8px;
+}
+
+window.wall-split scale value {
+  color: @subtext0;
+}
+
+window.wall-split separator {
+  background-color: @surface1;
+}

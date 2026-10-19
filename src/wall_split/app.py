@@ -7,6 +7,7 @@ gi.require_version("Gdk", "4.0")
 
 from gi.repository import Gtk, Gdk, Gio, GLib
 
+from wall_split import config, theme
 from wall_split.pairings import viable_pairings, pairing_index_for_cut, Pairing
 from wall_split.preview import PreviewArea
 from wall_split.dnd import setup_drop_target, load_file
@@ -15,7 +16,6 @@ from wall_split.split import cut_x_for_left_ratio, right_ratio_for_cut
 from wall_split.crop import MAX_MONITOR_SIDE, Box, box_ratio, crop_rects, cut_fraction, fit_box, monitor_sizes, reshape
 
 
-REJECT_CSS = b".rejected { outline: 3px solid #e01b24; outline-offset: -3px; }"
 REJECT_FLASH_MS = 1500
 
 
@@ -23,9 +23,7 @@ class SplitWindow(Gtk.ApplicationWindow):
     def __init__(self, app, **kwargs):
         super().__init__(application=app, title="Wall Split", default_width=960, default_height=640, **kwargs)
 
-        css = Gtk.CssProvider()
-        css.load_from_bytes(GLib.Bytes.new(REJECT_CSS))
-        Gtk.StyleContext.add_provider_for_display(self.get_display(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        self.add_css_class(theme.WINDOW_CLASS)
         self._reject_timeout = 0
 
         self.source_w = 0
@@ -66,6 +64,7 @@ class SplitWindow(Gtk.ApplicationWindow):
             label="Drag and drop an image here",
             halign=Gtk.Align.CENTER,
             valign=Gtk.Align.CENTER,
+            css_classes=["dim-label"],
         )
         self.stack.add_named(drop_label, "hint")
 
@@ -100,8 +99,8 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.pairing_dropdown.connect("notify::selected", self._on_pairing_selected)
         pairing_row.append(self.pairing_dropdown)
 
-        self.left_ratio_label = Gtk.Label(label="Left: —", halign=Gtk.Align.START)
-        self.right_ratio_label = Gtk.Label(label="Right: —", halign=Gtk.Align.END, hexpand=True)
+        self.left_ratio_label = Gtk.Label(label="Left: —", halign=Gtk.Align.START, css_classes=["dim-label"])
+        self.right_ratio_label = Gtk.Label(label="Right: —", halign=Gtk.Align.END, hexpand=True, css_classes=["dim-label"])
         pairing_row.append(self.left_ratio_label)
         pairing_row.append(self.right_ratio_label)
 
@@ -138,7 +137,7 @@ class SplitWindow(Gtk.ApplicationWindow):
             self.monitor_fields.append((width, height))
             width.connect("value-changed", self._on_monitor_changed)
             height.connect("value-changed", self._on_monitor_changed)
-        self.box_label = Gtk.Label(label="Box: —", halign=Gtk.Align.START)
+        self.box_label = Gtk.Label(label="Box: —", halign=Gtk.Align.START, css_classes=["dim-label"])
         page.append(self.box_label)
         return page
 
@@ -274,6 +273,7 @@ class WallSplitApp(Gtk.Application):
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
+        theme.load(config.load())
         self.set_accels_for_action("win.save", ["<Ctrl>s"])
         self.set_accels_for_action("win.split-mode", ["<Ctrl>1"])
         self.set_accels_for_action("win.crop-mode", ["<Ctrl>2"])

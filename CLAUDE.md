@@ -49,10 +49,13 @@ src/wall_split/pairings.py  common ratios, the pairing list, dropdown index, no 
 src/wall_split/dnd.py       drop target, async image load                          WIN-3, WIN-4, WIN-9
 src/wall_split/preview.py   preview drawing area, cut line, crop box              WIN-5, CROP-4
 src/wall_split/export.py    save dialog, split and crop parts, PNG writing, alert EXP, CROP-6
+src/wall_split/config.py    config.ini: Config, tolerant read, first-run file        CONF-1…CONF-4, CONF-8
+src/wall_split/theme.py     Catppuccin CSS provider, flavor = gtk                  LOOK-3…LOOK-10, CONF-5
+src/wall_split/datadir.py   finds data/ in the checkout or share/wall-split        CONF-7
 src/wall_split/__main__.py  `python -m wall_split`                                INT-2
 tests/                      pytest unit tests (GTK ones skip without a display)
 tests/assets/               images and impostor files for manual checks (README)
-data/                       icons and desktop entry                               LOOK-1, LOOK-2, INT-5
+data/                       icons, desktop entry, style.css, themes/, config.example.ini   LOOK-1…LOOK-10, INT-5, CONF-7
 nix/package.nix             buildPythonApplication, wrapped by wrapGAppsHook4     INT-3, INT-6
 scripts/manual/             UI checks (lib.sh helpers; headless.sh runs one in a headless sway)
   smoke.sh                  window, app ID, opening files                         WIN-1, WIN-2, WIN-9

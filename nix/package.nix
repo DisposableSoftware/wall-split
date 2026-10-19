@@ -21,6 +21,7 @@ python3Packages.buildPythonApplication {
       ../src
       ../tests
       ../data
+      ../spec
     ];
   };
 
@@ -40,6 +41,8 @@ python3Packages.buildPythonApplication {
     install -Dm644 data/io.github.DisposableSoftware.WallSplit.desktop -t $out/share/applications
     install -Dm644 data/io.github.DisposableSoftware.WallSplit.svg -t $out/share/icons/hicolor/scalable/apps
     install -Dm644 data/io.github.DisposableSoftware.WallSplit-symbolic.svg -t $out/share/icons/hicolor/symbolic/apps
+    install -Dm644 data/style.css data/config.example.ini -t $out/share/wall-split
+    install -Dm644 data/themes/*.css -t $out/share/wall-split/themes
   '';
 
   # wrapGAppsHook4 and the Python wrapper would each wrap the script; fold the GApps
@@ -53,6 +56,7 @@ python3Packages.buildPythonApplication {
   pythonImportsCheck = [
     "wall_split.split"
     "wall_split.pairings"
+    "wall_split.config"
   ];
 
   meta = {

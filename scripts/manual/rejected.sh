@@ -3,7 +3,7 @@
 # Spec: WIN-3, WIN-4, WIN-9.
 # Run from the repo root after `nix build`, with no Wall Split windows open. Loads an
 # image, then opens a text file and a broken PNG from the command line: each one flashes
-# a red border on the preview, and the loaded image and cut stay as they were. The type
+# a @red outline on the preview, and the loaded image and cut stay as they were. The type
 # comes from the content, not the name: text called fake.png is rejected, and a PNG
 # called picture.txt loads.
 cd "$(dirname "$0")/../.." || exit 1
@@ -25,18 +25,18 @@ some() { awk -v v="$1" 'BEGIN { print (v > 0) ? "yes" : "no" }'; }
 launch "" "$T/halves.png"
 shot "$OUT/loaded.png"
 before=$(share loaded '#0000ff')
-check "no border at first" no "$(some "$(share loaded '#e01b24')")"
+check "no border at first" no "$(some "$(share loaded '#f38ba8')")"
 
 for f in notes.txt broken.png fake.png; do
   "$BIN" "$T/$f" >/dev/null 2>&1
   sleep 0.3
   shot "$OUT/$f.png"
-  check "$f: red border (WIN-4)" yes "$(some "$(share "$f" '#e01b24')")"
+  check "$f: @red outline (WIN-4)" yes "$(some "$(share "$f" '#f38ba8')")"
 done
 
 sleep 2
 shot "$OUT/after.png"
-check "the border goes away" no "$(some "$(share after '#e01b24')")"
+check "the border goes away" no "$(some "$(share after '#f38ba8')")"
 # The border covers some of the image, so compare once it has gone.
 check "image and cut unchanged (WIN-4)" "$before $(share loaded "#00ff00")" "$(share after "#0000ff") $(share after "#00ff00")"
 
