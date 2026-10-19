@@ -26,10 +26,10 @@ dialog_keys() {
   sleep 0.6
 }
 
-# export_to PATH: opens Export with Ctrl+E (WIN-13) and saves as PATH.
+# export_to PATH: opens Save with Ctrl+S (WIN-13) and saves as PATH.
 export_to() {
   focus_app; sleep 0.3
-  keys -M ctrl e -m ctrl
+  keys -M ctrl s -m ctrl
   sleep 1
   check "the save dialog opened" 2 "$(all_wins | jq length)"
   dialog_keys -M ctrl a -m ctrl
@@ -64,7 +64,7 @@ mkdir -p "$T/crop"
 cleanup; sleep 0.5
 launch "" "$T/bands.png"
 keys -M ctrl 2 -m ctrl
-keys -M ctrl e -m ctrl
+keys -M ctrl s -m ctrl
 sleep 1
 check "the save dialog opened in crop mode" 2 "$(all_wins | jq length)"
 dialog_keys -M ctrl a -m ctrl

@@ -36,8 +36,8 @@ rescaled: every pixel of the source ends up in exactly one of the two outputs.
   drag a box shaped like them side by side over the part of the image you want. Each half
   is scaled to its monitor's exact resolution.
 - **Keys:** <kbd>Ctrl</kbd>+<kbd>1</kbd> split mode, <kbd>Ctrl</kbd>+<kbd>2</kbd> crop mode,
-  <kbd>Ctrl</kbd>+<kbd>E</kbd> export. No header bar: it is barless, like the other apps.
-- **Export** writes `<name>-left.png` and `<name>-right.png`: in split mode at native
+  <kbd>Ctrl</kbd>+<kbd>S</kbd> save. No header bar: it is barless, like the other apps.
+- **Save** writes `<name>-left.png` and `<name>-right.png`: in split mode at native
   resolution, in crop mode at your monitors' sizes.
 
 It is early. [`spec/roadmap.md`](spec/roadmap.md) has what is planned, and [`spec/`](spec/README.md)

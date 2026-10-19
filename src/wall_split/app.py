@@ -44,14 +44,14 @@ class SplitWindow(Gtk.ApplicationWindow):
         mode_box.append(self.split_btn)
         mode_box.append(self.crop_btn)
 
-        self.export_btn = Gtk.Button.new_with_label("Export...")
-        self.export_btn.set_valign(Gtk.Align.CENTER)
-        self.export_btn.set_action_name("win.export")
+        self.save_btn = Gtk.Button.new_with_label("Save...")
+        self.save_btn.set_valign(Gtk.Align.CENTER)
+        self.save_btn.set_action_name("win.save")
 
-        self.export_action = Gio.SimpleAction.new("export", None)
-        self.export_action.connect("activate", self._on_export)
-        self.export_action.set_enabled(False)
-        self.add_action(self.export_action)
+        self.save_action = Gio.SimpleAction.new("save", None)
+        self.save_action.connect("activate", self._on_save)
+        self.save_action.set_enabled(False)
+        self.add_action(self.save_action)
         for name, button in (("split-mode", self.split_btn), ("crop-mode", self.crop_btn)):
             action = Gio.SimpleAction.new(name, None)
             action.connect("activate", lambda _a, _p, b=button: b.set_active(True))
@@ -84,7 +84,7 @@ class SplitWindow(Gtk.ApplicationWindow):
         top_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         top_row.append(mode_box)
         top_row.append(Gtk.Box(hexpand=True))
-        top_row.append(self.export_btn)
+        top_row.append(self.save_btn)
         self.controls_stack = Gtk.Stack(hexpand=True)
         controls.append(top_row)
         controls.append(self.controls_stack)
@@ -207,7 +207,7 @@ class SplitWindow(Gtk.ApplicationWindow):
 
         self.preview.set_image(pixbuf, self.cut_x, self.source_w)
         self.stack.set_visible_child_name("preview")
-        self.export_action.set_enabled(True)
+        self.save_action.set_enabled(True)
         self._update_ratio_labels()
         if self.mode == "crop":
             self._place_box()
@@ -257,7 +257,7 @@ class SplitWindow(Gtk.ApplicationWindow):
             f"Right: {self.source_w - self.cut_x}×{self.source_h} ({right_ratio:.2f})"
         )
 
-    def _on_export(self, _action, _param):
+    def _on_save(self, _action, _param):
         pixbuf = self.pixbuf
         if self.mode == "crop" and self.box:
             monitors = self._monitors()
@@ -274,7 +274,7 @@ class WallSplitApp(Gtk.Application):
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
-        self.set_accels_for_action("win.export", ["<Ctrl>e"])
+        self.set_accels_for_action("win.save", ["<Ctrl>s"])
         self.set_accels_for_action("win.split-mode", ["<Ctrl>1"])
         self.set_accels_for_action("win.crop-mode", ["<Ctrl>2"])
 

@@ -38,7 +38,7 @@ pointer_start
 # Ctrl+2 switches to crop mode (WIN-13); the right monitor's width field is clicked.
 keys -M ctrl 2 -m ctrl
 shot "$OUT/1-placed.png"
-pointer_click 550 565
+pointer_click 400 565
 keys -M ctrl a -m ctrl
 keys 3440
 keys -k Return
