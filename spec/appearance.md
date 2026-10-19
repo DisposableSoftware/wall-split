@@ -17,6 +17,6 @@
 
 ## Implementation notes
 
-- `src/wall_split/theme.py` ports Junk Drawer's `theme.rs`. The theme files in `data/themes/` are copies of the style guide's, byte for byte.
+- `src/wall_split/theme.py` ports Junk Drawer's `theme.rs`. The theme files in `data/themes/` are copies of the style guide's, byte for byte. The colours are the Catppuccin palette (https://catppuccin.com/palette) by the Catppuccin community, not ours; each theme file keeps its header comment saying so, and the README credits it.
 - The preview is a `Gtk.DrawingArea`, so CSS never touches the pixels it draws. Its surroundings (the stack, the drop hint) are transparent.
 - The alert and file dialogs are GTK's own windows and carry no `wall-split` class, so the app's rules do not reach them (`LOOK-3`).
