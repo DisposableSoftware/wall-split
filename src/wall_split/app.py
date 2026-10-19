@@ -76,15 +76,18 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.stack.set_visible_child_name("hint")
         setup_drop_target(self.stack, self._on_image_loaded, self._on_rejected)
 
-        controls_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
-        controls_row.set_margin_top(12)
-        controls_row.set_margin_bottom(12)
-        controls_row.set_margin_start(12)
-        controls_row.set_margin_end(12)
+        controls = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        controls.set_margin_top(12)
+        controls.set_margin_bottom(12)
+        controls.set_margin_start(12)
+        controls.set_margin_end(12)
+        top_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        top_row.append(mode_box)
+        top_row.append(Gtk.Box(hexpand=True))
+        top_row.append(self.export_btn)
         self.controls_stack = Gtk.Stack(hexpand=True)
-        controls_row.append(mode_box)
-        controls_row.append(self.controls_stack)
-        controls_row.append(self.export_btn)
+        controls.append(top_row)
+        controls.append(self.controls_stack)
 
         controls_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.controls_stack.add_named(controls_box, "split")
@@ -113,7 +116,7 @@ class SplitWindow(Gtk.ApplicationWindow):
         controls_box.append(self.slider)
 
         main_box.append(self.stack)
-        main_box.append(controls_row)
+        main_box.append(controls)
         self.set_child(main_box)
 
     def _build_crop_controls(self) -> Gtk.Widget:
