@@ -2,8 +2,6 @@
 
 The order of approved work: `planned` requirements, and `partial` ones with a known bug from `/bug`. Change it here when priorities change. `/implement` works through this file: the verification backlog first, then the requirements in the order listed.
 
-1. `CROP-2`, `CROP-3`: the box shape and its starting place (pure math, unit-tested first).
-2. `WIN-10`: the mode switch (built; done once the box is drawn).
 4. `CROP-4`, `CROP-5`: drawing, moving and resizing the box, and its label.
 5. `CROP-6`: export in crop mode.
 

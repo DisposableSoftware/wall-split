@@ -47,7 +47,7 @@ src/wall_split/split.py     split math, no GTK                                  
 src/wall_split/crop.py      crop box math and monitor ordering, no GTK            CROP
 src/wall_split/pairings.py  common ratios, the pairing list, dropdown index, no GTK SPLIT-3, SPLIT-4, SPLIT-5, WIN-7
 src/wall_split/dnd.py       drop target, async image load                          WIN-3, WIN-4, WIN-9
-src/wall_split/preview.py   preview drawing area and cut line                     WIN-5
+src/wall_split/preview.py   preview drawing area, cut line, crop box              WIN-5, CROP-4
 src/wall_split/export.py    save dialog, PNG writing, error alert                 EXP
 src/wall_split/__main__.py  `python -m wall_split`                                INT-2
 tests/                      pytest unit tests (GTK ones skip without a display)
@@ -57,6 +57,7 @@ nix/package.nix             buildPythonApplication, wrapped by wrapGAppsHook4   
 scripts/manual/             UI checks (lib.sh helpers; headless.sh runs one in a headless sway)
   smoke.sh                  window, app ID, opening files                         WIN-1, WIN-2, WIN-9
   modes.sh                  Split/Crop switch, round trip                         WIN-10
+  crop.sh                   crop box placement, reshaping, label                  CROP-2, CROP-3, CROP-5
   preview.sh                preview fits the image, cut line placement           WIN-5
   slider.sh                 dropdown, slider and labels stay in sync              WIN-3, WIN-6, WIN-7, WIN-8, SPLIT-6
   rejected.sh               red border on a rejected file, state kept; content    WIN-3, WIN-4

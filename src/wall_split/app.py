@@ -12,7 +12,7 @@ from wall_split.preview import PreviewArea
 from wall_split.dnd import setup_drop_target, load_file
 from wall_split.export import show_export_dialog
 from wall_split.split import cut_x_for_left_ratio, right_ratio_for_cut
-from wall_split.crop import MAX_MONITOR_SIDE, monitor_sizes
+from wall_split.crop import MAX_MONITOR_SIDE, Box, box_ratio, cut_fraction, fit_box, monitor_sizes, reshape
 
 
 REJECT_CSS = b".rejected { outline: 3px solid #e01b24; outline-offset: -3px; }"
@@ -33,6 +33,7 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.pixbuf = None
         self.cut_x = 0
         self.pairings: list[Pairing] = []
+        self.box: Box | None = None
 
         self.mode = "split"
 
@@ -124,6 +125,8 @@ class SplitWindow(Gtk.ApplicationWindow):
             row.append(Gtk.Label(label="×"))
             row.append(height)
             self.monitor_fields.append((width, height))
+            width.connect("value-changed", self._on_monitor_changed)
+            height.connect("value-changed", self._on_monitor_changed)
         self.box_label = Gtk.Label(label="Box: —", halign=Gtk.Align.END, hexpand=True)
         row.append(self.box_label)
         return row
@@ -141,6 +144,25 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.mode = "crop" if self.crop_btn.get_active() else "split"
         self.controls_stack.set_visible_child_name(self.mode)
         self.preview.set_mode(self.mode)
+        if self.mode == "crop":
+            self._place_box()
+
+    def _monitors(self):
+        return tuple((w.get_value_as_int(), h.get_value_as_int()) for w, h in self.monitor_fields)
+
+    def _place_box(self):
+        if not self.pixbuf:
+            return
+        self._set_box(fit_box(self.source_w, self.source_h, box_ratio(*self._monitors())))
+
+    def _set_box(self, box: Box):
+        self.box = box
+        self.preview.set_crop(box, cut_fraction(*self._monitors()))
+        self.box_label.set_text(f"Box: {round(box.w)}×{round(box.h)} at {round(box.x)}, {round(box.y)}")
+
+    def _on_monitor_changed(self, _field):
+        if self.box:
+            self._set_box(reshape(self.box, box_ratio(*self._monitors()), self.source_w, self.source_h))
 
     def _on_rejected(self):
         self.stack.add_css_class("rejected")
@@ -177,6 +199,8 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.stack.set_visible_child_name("preview")
         self.export_btn.set_sensitive(True)
         self._update_ratio_labels()
+        if self.mode == "crop":
+            self._place_box()
 
     def _refresh_dropdown(self):
         items = [f"{p.left_label} + {p.right_label}" for p in self.pairings]
