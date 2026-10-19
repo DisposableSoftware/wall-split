@@ -11,7 +11,8 @@ This folder is the source of truth for what Wall Split does. The code implements
 | [window.md](window.md) | `WIN` | The window, drag-and-drop, preview and controls |
 | [crop.md](crop.md) | `CROP` | Crop mode: the monitor sizes, the box, and cutting from it |
 | [export.md](export.md) | `EXP` | Writing the two output images |
-| [appearance.md](appearance.md) | `LOOK` | The app icon |
+| [appearance.md](appearance.md) | `LOOK` | The app icon, the Catppuccin theme |
+| [configuration.md](configuration.md) | `CONF` | `config.ini`, `style.css` and their defaults |
 | [integration.md](integration.md) | `INT` | Nix, launching |
 | [roadmap.md](roadmap.md) | — | The order of planned work, which `/implement` follows |
 
