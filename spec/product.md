@@ -1,6 +1,6 @@
 # Product
 
-Wall Split turns one wallpaper image into two images for a dual-monitor setup. The user drops an image onto the window and works in one of two modes: in split mode they pick an aspect-ratio pairing or move a slider to place a vertical cut through the whole image (`SPLIT`); in crop mode they drag a box, fixed to the two monitors' combined shape, over part of the image (`CROP`). Either way they export the two halves. Display name **Wall Split**, binary `wall-split`, app ID `io.github.DisposableSoftware.WallSplit` (`WIN-2`).
+Wall Split turns one wallpaper image into two images for a dual-monitor setup. The user drops an image onto the window and works in one of two modes: in split mode they pick an aspect-ratio pairing or move a slider to place a vertical cut through the whole image (`SPLIT`); in crop mode they drag a box, fixed to the two monitors' combined shape, over part of the image (`CROP`). Either way they save the two halves. Display name **Wall Split**, binary `wall-split`, app ID `io.github.DisposableSoftware.WallSplit` (`WIN-2`).
 
 ## Requirements
 
