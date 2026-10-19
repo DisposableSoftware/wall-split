@@ -17,6 +17,10 @@
 >
 > Bug reports will be read with great affection and then ignored.
 
+| Split mode | Crop mode |
+|---|---|
+| ![Split mode: a wide wallpaper cut down the middle, with the 16:9 + 16:9 pairing, the slider and the size labels](docs/screenshots/split.png) | ![Crop mode: a box shaped like a 4K and a 1440p monitor side by side, dragged over part of the wallpaper](docs/screenshots/crop.png) |
+
 Wall Split (`wall-split`) takes a single wide image, such as a 5120×1440 wallpaper, and
 splits it at one vertical cut into a left and a right image. In split mode nothing is cropped or
 rescaled: every pixel of the source ends up in exactly one of the two outputs.
