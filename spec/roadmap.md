@@ -2,8 +2,7 @@
 
 The order of approved work: `planned` requirements, and `partial` ones with a known bug from `/bug`. Change it here when priorities change. `/implement` works through this file: the verification backlog first, then the requirements in the order listed.
 
-1. `WIN-1`, `WIN-11`, `WIN-10`: drop the header bar; the mode switch and Export move into the controls row.
-2. `WIN-13`: shortcuts for Export and the two modes.
+Nothing is planned.
 
 
 ## Verification backlog

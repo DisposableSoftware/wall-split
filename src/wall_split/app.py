@@ -46,8 +46,16 @@ class SplitWindow(Gtk.ApplicationWindow):
 
         self.export_btn = Gtk.Button.new_with_label("Export...")
         self.export_btn.set_valign(Gtk.Align.CENTER)
-        self.export_btn.connect("clicked", self._on_export)
-        self.export_btn.set_sensitive(False)
+        self.export_btn.set_action_name("win.export")
+
+        self.export_action = Gio.SimpleAction.new("export", None)
+        self.export_action.connect("activate", self._on_export)
+        self.export_action.set_enabled(False)
+        self.add_action(self.export_action)
+        for name, button in (("split-mode", self.split_btn), ("crop-mode", self.crop_btn)):
+            action = Gio.SimpleAction.new(name, None)
+            action.connect("activate", lambda _a, _p, b=button: b.set_active(True))
+            self.add_action(action)
 
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
@@ -196,7 +204,7 @@ class SplitWindow(Gtk.ApplicationWindow):
 
         self.preview.set_image(pixbuf, self.cut_x, self.source_w)
         self.stack.set_visible_child_name("preview")
-        self.export_btn.set_sensitive(True)
+        self.export_action.set_enabled(True)
         self._update_ratio_labels()
         if self.mode == "crop":
             self._place_box()
@@ -246,7 +254,7 @@ class SplitWindow(Gtk.ApplicationWindow):
             f"Right: {self.source_w - self.cut_x}×{self.source_h} ({right_ratio:.2f})"
         )
 
-    def _on_export(self, btn):
+    def _on_export(self, _action, _param):
         pixbuf = self.pixbuf
         if self.mode == "crop" and self.box:
             monitors = self._monitors()
@@ -260,6 +268,12 @@ class SplitWindow(Gtk.ApplicationWindow):
 class WallSplitApp(Gtk.Application):
     def __init__(self):
         super().__init__(application_id="io.github.DisposableSoftware.WallSplit", flags=Gio.ApplicationFlags.HANDLES_OPEN)
+
+    def do_startup(self):
+        Gtk.Application.do_startup(self)
+        self.set_accels_for_action("win.export", ["<Ctrl>e"])
+        self.set_accels_for_action("win.split-mode", ["<Ctrl>1"])
+        self.set_accels_for_action("win.crop-mode", ["<Ctrl>2"])
 
     def _window(self) -> SplitWindow:
         return self.get_active_window() or SplitWindow(self)

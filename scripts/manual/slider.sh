@@ -1,7 +1,7 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p wtype jq grim imagemagick
 # Spec: WIN-6, WIN-7, WIN-8, SPLIT-6, WIN-3.
-# Run from the repo root after `nix build`, with no Wall Split windows open. Loads a
+# Run headless from the repo root after `nix build`, with no Wall Split windows open. Loads a
 # 5120×1440 image; check the screenshots in $OUT:
 #   1-loaded  dropdown "16:9 + 16:9", slider "1.78", "Left: 2560×1440 (1.78)", "Right: 2560×1440 (1.78)"
 #   2-pairing "5:4 + 21:9" picked in the dropdown: slider "1.25", "Left: 1800×1440 (1.25)",
@@ -21,9 +21,9 @@ magick -size 1001x1000 gradient:green-yellow "$T/square.png"
 
 launch "" "$T/wide.png"
 shot "$OUT/1-loaded.png"
-# Focus order: Split, Crop and Export come first; the fifth Tab reaches the dropdown.
-keys -k Tab -k Tab -k Tab -k Tab -k Tab
-keys -k space
+# Clicking the dropdown opens it; once it closes, Tab moves on to the slider.
+pointer_start
+pointer_click 262 544
 keys -k Down
 keys -k Return
 shot "$OUT/2-pairing.png"

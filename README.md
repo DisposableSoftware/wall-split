@@ -31,6 +31,8 @@ rescaled: every pixel of the source ends up in exactly one of the two outputs.
 - **Crop mode:** pick your two monitors' sizes (filled in from the ones you have), then
   drag a box shaped like them side by side over the part of the image you want. Each half
   is scaled to its monitor's exact resolution.
+- **Keys:** <kbd>Ctrl</kbd>+<kbd>1</kbd> split mode, <kbd>Ctrl</kbd>+<kbd>2</kbd> crop mode,
+  <kbd>Ctrl</kbd>+<kbd>E</kbd> export. No header bar: it is barless, like the other apps.
 - **Export** writes `<name>-left.png` and `<name>-right.png`: in split mode at native
   resolution, in crop mode at your monitors' sizes.
 

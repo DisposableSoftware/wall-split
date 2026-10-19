@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p wtype jq grim imagemagick
-# Spec: EXP-1, EXP-2, EXP-3, PROD-4, CROP-6.
+# Spec: EXP-1, EXP-2, EXP-3, PROD-4, CROP-6, WIN-13.
 # Run from the repo root after `nix build`, with no Wall Split windows open. Loads a
 # 5120×1440 image, exports it as wall.png through the save dialog, and compares the two
 # outputs with the source. Then exports into a read-only directory and screenshots the
@@ -26,11 +26,10 @@ dialog_keys() {
   sleep 0.6
 }
 
-# export_to PATH: opens Export (the fourth Tab stop, after Split and Crop) and saves as PATH.
+# export_to PATH: opens Export with Ctrl+E (WIN-13) and saves as PATH.
 export_to() {
   focus_app; sleep 0.3
-  keys -k Tab -k Tab -k Tab -k Tab
-  keys -k space
+  keys -M ctrl e -m ctrl
   sleep 1
   check "the save dialog opened" 2 "$(all_wins | jq length)"
   dialog_keys -M ctrl a -m ctrl
@@ -64,10 +63,8 @@ magick \( -size 6000x600 xc:"#00ff00" \) \( -size 3000x1800 xc:"#ff0000" -size 3
 mkdir -p "$T/crop"
 cleanup; sleep 0.5
 launch "" "$T/bands.png"
-keys -k Tab -k Tab -k Tab
-keys -k space
-keys -k Tab
-keys -k space
+keys -M ctrl 2 -m ctrl
+keys -M ctrl e -m ctrl
 sleep 1
 check "the save dialog opened in crop mode" 2 "$(all_wins | jq length)"
 dialog_keys -M ctrl a -m ctrl

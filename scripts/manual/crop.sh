@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p wtype jq grim imagemagick
-# Spec: CROP-2, CROP-3, CROP-4, CROP-5.
+# Spec: CROP-2, CROP-3, CROP-4, CROP-5, WIN-13.
 # Run headless from the repo root after `nix build`, with no Wall Split windows open:
 #   ./scripts/manual/headless.sh ./scripts/manual/crop.sh
 # The monitor fields prefill to 3840×2160 and 2560×1440 (CROP-1), both 16:9. Loads a
@@ -35,11 +35,10 @@ near() { awk -v a="$1" -v b="$2" -v t="${3:-2}" 'BEGIN { d = a - b; if (d < 0) d
 
 launch "" "$T/big.png"
 pointer_start
-# Focus order: Split, Crop, Export, then in crop mode the four monitor fields.
-keys -k Tab -k Tab -k Tab
-keys -k space
+# Ctrl+2 switches to crop mode (WIN-13); the right monitor's width field is clicked.
+keys -M ctrl 2 -m ctrl
 shot "$OUT/1-placed.png"
-keys -k Tab -k Tab -k Tab -k Tab
+pointer_click 550 565
 keys -M ctrl a -m ctrl
 keys 3440
 keys -k Return
@@ -61,8 +60,10 @@ check "corner resize keeps the shape (CROP-4)" yes "$(near "$(awk -v w="$w3" -v 
 pointer_drag $((x3 + w3 / 2)) $((y3 + h3 / 2)) $((x3 + w3 / 2 + 120)) $((y3 + h3 / 2 + 30))
 shot "$OUT/4-moved.png"
 read -r x4 y4 w4 h4 < <(box "$OUT/4-moved.png")
-check "dragging inside moves the box (CROP-4)" "yes yes" "$(near "$x4" $((x3 + 120))) $(near "$y4" $((y3 + 30)))"
-check "moving keeps the size (CROP-4)" "yes yes" "$(near "$w4" "$w3") $(near "$h4" "$h3")"
+# The resized box touches the window's left edge, which clips its handles; measure the
+# move and the size from the right edge and the height, which stay clear of it.
+check "dragging inside moves the box (CROP-4)" "yes yes" "$(near $((x4 + w4)) $((x3 + w3 + 120))) $(near "$y4" $((y3 + 30)))"
+check "moving keeps the size (CROP-4)" yes "$(near "$h4" "$h3")"
 
 pointer_drag $((x4 + w4 / 2)) $((y4 + h4 / 2)) $((x4 + w4 / 2 + 2000)) $((y4 + h4 / 2 + 2000))
 shot "$OUT/5-clamped.png"
