@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/icon.svg" width="96" alt="Wall Split icon">
+</p>
+
 <h1 align="center">Wall Split</h1>
 
 <p align="center">Cuts one wide wallpaper into two, for two monitors.</p>
