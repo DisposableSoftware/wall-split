@@ -1,10 +1,11 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p wtype jq grim imagemagick
-# Spec: WIN-10.
+# Spec: WIN-10, CROP-1.
 # Run from the repo root after `nix build`, with no Wall Split windows open. Loads
 # tests/assets/wide.png and switches modes from the keyboard; check the screenshots in $OUT:
 #   1-split  "Split" pressed; dropdown "16:9 + 16:9", slider, labels, the red cut line
-#   2-crop   "Crop" pressed; the Left and Right width × height fields and "Box:" label
+#   2-crop   "Crop" pressed; the Left and Right width × height fields (prefilled: 3840×2160
+#            from the headless output, 2560×1440 for the missing second monitor) and "Box:" label
 #            instead of the split controls, and no cut line
 #   3-split  back in split mode with the same dropdown, slider and labels as 1-split
 cd "$(dirname "$0")/../.." || exit 1

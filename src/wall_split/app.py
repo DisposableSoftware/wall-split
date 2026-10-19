@@ -12,7 +12,7 @@ from wall_split.preview import PreviewArea
 from wall_split.dnd import setup_drop_target, load_file
 from wall_split.export import show_export_dialog
 from wall_split.split import cut_x_for_left_ratio, right_ratio_for_cut
-from wall_split.crop import DEFAULT_MONITOR, MAX_MONITOR_SIDE
+from wall_split.crop import MAX_MONITOR_SIDE, monitor_sizes
 
 
 REJECT_CSS = b".rejected { outline: 3px solid #e01b24; outline-offset: -3px; }"
@@ -112,7 +112,7 @@ class SplitWindow(Gtk.ApplicationWindow):
     def _build_crop_controls(self) -> Gtk.Widget:
         row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6, valign=Gtk.Align.CENTER)
         self.monitor_fields = []
-        for side, (w, h) in (("Left", DEFAULT_MONITOR), ("Right", DEFAULT_MONITOR)):
+        for side, (w, h) in zip(("Left", "Right"), self._connected_monitor_sizes()):
             if side == "Right":
                 row.append(Gtk.Separator(orientation=Gtk.Orientation.VERTICAL, margin_start=6, margin_end=6))
             row.append(Gtk.Label(label=side))
@@ -127,6 +127,15 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.box_label = Gtk.Label(label="Box: —", halign=Gtk.Align.END, hexpand=True)
         row.append(self.box_label)
         return row
+
+    def _connected_monitor_sizes(self):
+        monitors = self.get_display().get_monitors()
+        found = []
+        for i in range(monitors.get_n_items()):
+            monitor = monitors.get_item(i)
+            g = monitor.get_geometry()
+            found.append((g.x, g.y, g.width, g.height, monitor.get_scale()))
+        return monitor_sizes(found)
 
     def _on_mode_toggled(self, button):
         self.mode = "crop" if self.crop_btn.get_active() else "split"
