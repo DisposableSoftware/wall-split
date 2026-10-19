@@ -37,25 +37,18 @@ class SplitWindow(Gtk.ApplicationWindow):
 
         self.mode = "split"
 
-        header = Gtk.HeaderBar()
-        header.set_show_title_buttons(True)
         self.split_btn = Gtk.ToggleButton(label="Split", active=True)
         self.crop_btn = Gtk.ToggleButton(label="Crop", group=self.split_btn)
         self.crop_btn.connect("toggled", self._on_mode_toggled)
-        mode_box = Gtk.Box(css_classes=["linked"])
+        mode_box = Gtk.Box(css_classes=["linked"], valign=Gtk.Align.CENTER)
         mode_box.append(self.split_btn)
         mode_box.append(self.crop_btn)
-        header.pack_start(mode_box)
-        self.file_label = Gtk.Label(label="No image loaded", halign=Gtk.Align.START)
-        header.pack_start(self.file_label)
 
         self.export_btn = Gtk.Button.new_with_label("Export...")
+        self.export_btn.set_valign(Gtk.Align.CENTER)
         self.export_btn.connect("clicked", self._on_export)
         self.export_btn.set_sensitive(False)
-        header.pack_end(self.export_btn)
-        self.set_titlebar(header)
 
-        # Main layout: preview fills space, controls below
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
         # Stack switches between the drop hint and the preview
@@ -75,11 +68,15 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.stack.set_visible_child_name("hint")
         setup_drop_target(self.stack, self._on_image_loaded, self._on_rejected)
 
-        self.controls_stack = Gtk.Stack()
-        self.controls_stack.set_margin_top(12)
-        self.controls_stack.set_margin_bottom(12)
-        self.controls_stack.set_margin_start(12)
-        self.controls_stack.set_margin_end(12)
+        controls_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        controls_row.set_margin_top(12)
+        controls_row.set_margin_bottom(12)
+        controls_row.set_margin_start(12)
+        controls_row.set_margin_end(12)
+        self.controls_stack = Gtk.Stack(hexpand=True)
+        controls_row.append(mode_box)
+        controls_row.append(self.controls_stack)
+        controls_row.append(self.export_btn)
 
         controls_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.controls_stack.add_named(controls_box, "split")
@@ -108,11 +105,13 @@ class SplitWindow(Gtk.ApplicationWindow):
         controls_box.append(self.slider)
 
         main_box.append(self.stack)
-        main_box.append(self.controls_stack)
+        main_box.append(controls_row)
         self.set_child(main_box)
 
     def _build_crop_controls(self) -> Gtk.Widget:
-        row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6, valign=Gtk.Align.CENTER)
+        page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6, valign=Gtk.Align.CENTER)
+        row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        page.append(row)
         self.monitor_fields = []
         for side, (w, h) in zip(("Left", "Right"), self._connected_monitor_sizes()):
             if side == "Right":
@@ -128,9 +127,9 @@ class SplitWindow(Gtk.ApplicationWindow):
             self.monitor_fields.append((width, height))
             width.connect("value-changed", self._on_monitor_changed)
             height.connect("value-changed", self._on_monitor_changed)
-        self.box_label = Gtk.Label(label="Box: —", halign=Gtk.Align.END, hexpand=True)
-        row.append(self.box_label)
-        return row
+        self.box_label = Gtk.Label(label="Box: —", halign=Gtk.Align.START)
+        page.append(self.box_label)
+        return page
 
     def _connected_monitor_sizes(self):
         monitors = self.get_display().get_monitors()
@@ -180,8 +179,6 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.pixbuf = pixbuf
         self.source_w = pixbuf.get_width()
         self.source_h = pixbuf.get_height()
-
-        self.file_label.set_text(gio_file.get_basename())
 
         self.slider.set_range(1, max(self.source_w - 1, 1))
         self.slider.set_increments(1, max(self.source_w // 100, 1))
