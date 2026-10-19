@@ -95,7 +95,10 @@ keys() {
 
 shot() { grim -g "$(active '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')" "$1"; }
 
-cleanup() { [ -n "${PID:-}" ] && kill "$PID" 2>/dev/null; true; }
+cleanup() {
+  if [ -n "${VP_PID:-}" ]; then exec {VP[1]}>&-; wait "$VP_PID" 2>/dev/null; VP_PID=; fi
+  [ -n "${PID:-}" ] && kill "$PID" 2>/dev/null; true
+}
 
 FAILS=0
 check() { # check DESCRIPTION EXPECTED ACTUAL
@@ -109,4 +112,36 @@ wait_for() {
   local got
   for _ in $(seq 25); do got=$(eval "$2"); [ "$got" = "$3" ] && break; sleep 0.2; done
   check "$1" "$3" "$got"
+}
+
+# Pointer input for the headless sway (vpointer.py). pointer_start once, then
+# pointer_drag X1 Y1 X2 Y2 or pointer_click X Y, in logical px inside the app's window.
+pointer_start() {
+  [ -n "${HEADLESS:-}" ] || { echo "pointer_* only works headless" >&2; exit 2; }
+  local proto=$XDG_RUNTIME_DIR/vp ext
+  ext="$(swaymsg -t get_outputs | jq -r '[.[].rect | .x + .width] | max') $(swaymsg -t get_outputs | jq -r '[.[].rect | .y + .height] | max')"
+  coproc VP {
+    nix-shell -p python3Packages.pywayland wlr-protocols wayland-scanner pkg-config --run "
+      mkdir -p $proto && python -m pywayland.scanner \
+        -i \$(pkg-config --variable=pkgdatadir wayland-scanner)/wayland.xml \
+        \$(pkg-config --variable=pkgdatadir wlr-protocols)/unstable/wlr-virtual-pointer-unstable-v1.xml \
+        -o $proto/vpproto 2>/dev/null && touch $proto/vpproto/__init__.py &&
+      exec python scripts/manual/vpointer.py $proto $ext"
+  }
+}
+pointer() { echo "$*" >&"${VP[1]}"; read -r _ <&"${VP[0]}"; }
+_window_origin() { wins | jq -r '.[0].at | "\(.[0]) \(.[1])"'; }
+pointer_click() {
+  local wx wy; read -r wx wy < <(_window_origin)
+  pointer move $((wx + $1)) $((wy + $2)); sleep 0.1
+  pointer press; sleep 0.05; pointer release; sleep 0.4
+}
+pointer_drag() {
+  local wx wy i n=12; read -r wx wy < <(_window_origin)
+  pointer move $((wx + $1)) $((wy + $2)); sleep 0.1
+  pointer press; sleep 0.1
+  for i in $(seq $n); do
+    pointer move $((wx + $1 + ($3 - $1) * i / n)) $((wy + $2 + ($4 - $2) * i / n)); sleep 0.03
+  done
+  sleep 0.1; pointer release; sleep 0.4
 }

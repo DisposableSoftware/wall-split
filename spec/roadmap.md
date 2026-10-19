@@ -2,8 +2,7 @@
 
 The order of approved work: `planned` requirements, and `partial` ones with a known bug from `/bug`. Change it here when priorities change. `/implement` works through this file: the verification backlog first, then the requirements in the order listed.
 
-4. `CROP-4`, `CROP-5`: drawing, moving and resizing the box, and its label.
-5. `CROP-6`: export in crop mode.
+1. `CROP-6`: export in crop mode.
 
 
 ## Verification backlog

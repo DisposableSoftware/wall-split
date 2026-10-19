@@ -57,7 +57,8 @@ nix/package.nix             buildPythonApplication, wrapped by wrapGAppsHook4   
 scripts/manual/             UI checks (lib.sh helpers; headless.sh runs one in a headless sway)
   smoke.sh                  window, app ID, opening files                         WIN-1, WIN-2, WIN-9
   modes.sh                  Split/Crop switch, round trip                         WIN-10
-  crop.sh                   crop box placement, reshaping, label                  CROP-2, CROP-3, CROP-5
+  crop.sh                   crop box placement, reshaping, dragging, label        CROP-2…CROP-5
+  vpointer.py               a virtual pointer for headless drags (lib.sh pointer_*)
   preview.sh                preview fits the image, cut line placement           WIN-5
   slider.sh                 dropdown, slider and labels stay in sync              WIN-3, WIN-6, WIN-7, WIN-8, SPLIT-6
   rejected.sh               red border on a rejected file, state kept; content    WIN-3, WIN-4
@@ -92,6 +93,7 @@ Run checks with `./scripts/manual/headless.sh ./scripts/manual/<name>.sh`. It st
 - Headless sway drops the first key after `wtype` loads its keymap; `keys` sends a Shift tap first to absorb it.
 - The headless runner can't drag a file into the window. Load images from the command line (`WIN-9`); only the drag itself needs a real Hyprland session.
 - In headless mode `hyprctl` only answers `cursorpos` and `monitors`; anything else, and `ydotool`, fails instead of reaching the real session.
+- For pointer input use `pointer_start`, then `pointer_click` or `pointer_drag` (window-relative logical px). They drive one long-lived virtual pointer (`vpointer.py`); `wlrctl` makes a new pointer per command, so its clicks never reach the surface its move entered.
 
 ### On Hyprland
 

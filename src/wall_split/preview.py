@@ -1,9 +1,10 @@
 import cairo
 from gi.repository import Gtk, Gdk, GdkPixbuf
 
-from wall_split.crop import Box
+from wall_split.crop import CORNERS, Box, move, resize_corner
 
 HANDLE = 8
+HANDLE_REACH = 12
 
 
 class PreviewArea(Gtk.DrawingArea):
@@ -14,7 +15,16 @@ class PreviewArea(Gtk.DrawingArea):
         self.mode = "split"
         self.box: Box | None = None
         self.box_cut_frac = 0.5
+        self.box_ratio = 1.0
+        self.on_box_changed = None
+        self._drag = None
         self.set_draw_func(self._draw)
+
+        gesture = Gtk.GestureDrag()
+        gesture.connect("drag-begin", self._on_drag_begin)
+        gesture.connect("drag-update", self._on_drag_update)
+        gesture.connect("drag-end", self._on_drag_end)
+        self.add_controller(gesture)
 
     def set_mode(self, mode: str):
         self.mode = mode
@@ -28,9 +38,10 @@ class PreviewArea(Gtk.DrawingArea):
             self.cut_x_frac = 0.5
         self.queue_draw()
 
-    def set_crop(self, box: Box | None, cut_frac: float):
+    def set_crop(self, box: Box | None, cut_frac: float, ratio: float):
         self.box = box
         self.box_cut_frac = cut_frac
+        self.box_ratio = ratio
         self.queue_draw()
 
     def _layout(self, width: int, height: int):
@@ -39,6 +50,43 @@ class PreviewArea(Gtk.DrawingArea):
         src_h = self.pixbuf.get_height()
         scale = min(width / src_w, height / src_h)
         return scale, (width - src_w * scale) / 2, (height - src_h * scale) / 2
+
+    def _corner_points(self, box: Box, scale, offset_x, offset_y):
+        x0, y0 = offset_x + box.x * scale, offset_y + box.y * scale
+        x1, y1 = x0 + box.w * scale, y0 + box.h * scale
+        return dict(zip(CORNERS, ((x0, y0), (x1, y0), (x0, y1), (x1, y1))))
+
+    def _on_drag_begin(self, gesture, x, y):
+        if self.mode != "crop" or not self.box or not self.pixbuf:
+            gesture.set_state(Gtk.EventSequenceState.DENIED)
+            return
+        scale, ox, oy = self._layout(self.get_width(), self.get_height())
+        for corner, (cx, cy) in self._corner_points(self.box, scale, ox, oy).items():
+            if abs(x - cx) <= HANDLE_REACH and abs(y - cy) <= HANDLE_REACH:
+                self._drag = (corner, self.box, scale)
+                return
+        sx, sy = (x - ox) / scale, (y - oy) / scale
+        b = self.box
+        if b.x <= sx <= b.x + b.w and b.y <= sy <= b.y + b.h:
+            self._drag = ("move", self.box, scale)
+            return
+        gesture.set_state(Gtk.EventSequenceState.DENIED)
+
+    def _on_drag_update(self, gesture, dx, dy):
+        if not self._drag:
+            return
+        kind, start, scale = self._drag
+        W, H = self.pixbuf.get_width(), self.pixbuf.get_height()
+        sdx, sdy = dx / scale, dy / scale
+        if kind == "move":
+            box = move(start, sdx, sdy, W, H)
+        else:
+            box = resize_corner(start, kind, sdx, sdy, self.box_ratio, W, H)
+        if self.on_box_changed:
+            self.on_box_changed(box)
+
+    def _on_drag_end(self, gesture, dx, dy):
+        self._drag = None
 
     def _draw(self, da: Gtk.DrawingArea, cr: cairo.Context, width: int, height: int):
         if not da.pixbuf or width <= 0 or height <= 0:

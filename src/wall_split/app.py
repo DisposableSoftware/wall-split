@@ -69,6 +69,7 @@ class SplitWindow(Gtk.ApplicationWindow):
         self.stack.add_named(drop_label, "hint")
 
         self.preview = PreviewArea(hexpand=True, vexpand=True)
+        self.preview.on_box_changed = self._set_box
         self.stack.add_named(self.preview, "preview")
 
         self.stack.set_visible_child_name("hint")
@@ -157,7 +158,7 @@ class SplitWindow(Gtk.ApplicationWindow):
 
     def _set_box(self, box: Box):
         self.box = box
-        self.preview.set_crop(box, cut_fraction(*self._monitors()))
+        self.preview.set_crop(box, cut_fraction(*self._monitors()), box_ratio(*self._monitors()))
         self.box_label.set_text(f"Box: {round(box.w)}×{round(box.h)} at {round(box.x)}, {round(box.y)}")
 
     def _on_monitor_changed(self, _field):
