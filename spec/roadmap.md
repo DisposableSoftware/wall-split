@@ -2,8 +2,7 @@
 
 The order of approved work: `planned` requirements, and `partial` ones with a known bug from `/bug`. Change it here when priorities change. `/implement` works through this file: the verification backlog first, then the requirements in the order listed.
 
-1. `LOOK-2`: the symbolic icon.
-2. `INT-5`, `INT-6`: a desktop entry, and installing it with the icons.
+1. `INT-5`, `INT-6`: a desktop entry, and installing it with the icons.
 
 
 ## Verification backlog
