@@ -1,7 +1,24 @@
-from gi.repository import Gtk, Gio, GLib
+from gi.repository import Gtk, Gio, GLib, GdkPixbuf
 
 
-def show_export_dialog(window: Gtk.ApplicationWindow, pixbuf, cut_x: int, source_w: int, source_h: int) -> None:
+def split_parts(pixbuf, cut_x: int):
+    w, h = pixbuf.get_width(), pixbuf.get_height()
+    right_start = min(cut_x, w - 1)
+    return pixbuf.new_subpixbuf(0, 0, cut_x, h), pixbuf.new_subpixbuf(right_start, 0, w - right_start, h)
+
+
+def crop_parts(pixbuf, rects, sizes):
+    """Each source rectangle (x, y, w, h) cut out and resampled to its (width, height)."""
+    parts = []
+    for (x, y, w, h), (out_w, out_h) in zip(rects, sizes):
+        sub = pixbuf.new_subpixbuf(x, y, w, h)
+        interp = GdkPixbuf.InterpType.HYPER if out_w < w else GdkPixbuf.InterpType.BILINEAR
+        parts.append(sub.scale_simple(out_w, out_h, interp))
+    return parts
+
+
+def show_export_dialog(window: Gtk.ApplicationWindow, make_parts) -> None:
+    """Asks where to save, then writes make_parts()'s left and right images there."""
     dialog = Gtk.FileDialog()
 
     def _on_chosen(dialog, result):
@@ -13,10 +30,10 @@ def show_export_dialog(window: Gtk.ApplicationWindow, pixbuf, cut_x: int, source
         base_no_ext = _stem(file.get_basename() or "wallpaper")
         directory = file.get_parent()
 
-        right_start = min(cut_x, source_w - 1)
+        left, right = make_parts()
         outputs = [
-            (pixbuf.new_subpixbuf(0, 0, cut_x, source_h), directory.get_child(f"{base_no_ext}-left.png")),
-            (pixbuf.new_subpixbuf(right_start, 0, source_w - right_start, source_h), directory.get_child(f"{base_no_ext}-right.png")),
+            (left, directory.get_child(f"{base_no_ext}-left.png")),
+            (right, directory.get_child(f"{base_no_ext}-right.png")),
         ]
         _save_all(outputs, lambda message: _show_error(window, message))
 

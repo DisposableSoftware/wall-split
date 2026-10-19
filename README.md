@@ -18,7 +18,7 @@
 > Bug reports will be read with great affection and then ignored.
 
 Wall Split (`wall-split`) takes a single wide image, such as a 5120×1440 wallpaper, and
-splits it at one vertical cut into a left and a right image. Nothing is cropped or
+splits it at one vertical cut into a left and a right image. In split mode nothing is cropped or
 rescaled: every pixel of the source ends up in exactly one of the two outputs.
 
 ## Features
@@ -28,7 +28,11 @@ rescaled: every pixel of the source ends up in exactly one of the two outputs.
 - **Pairings:** it lists the monitor ratio pairs that fit the image (16:9 + 16:9,
   16:9 + 32:9, …), with 16:9 + 16:9 first when the image is close to 32:9.
 - **A slider** for when no pairing fits, or you just want the cut somewhere else.
-- **Export** writes `<name>-left.png` and `<name>-right.png` at native resolution.
+- **Crop mode:** pick your two monitors' sizes (filled in from the ones you have), then
+  drag a box shaped like them side by side over the part of the image you want. Each half
+  is scaled to its monitor's exact resolution.
+- **Export** writes `<name>-left.png` and `<name>-right.png`: in split mode at native
+  resolution, in crop mode at your monitors' sizes.
 
 It is early. The preview doesn't scale yet, among other things; [`spec/roadmap.md`](spec/roadmap.md)
 has the honest list.

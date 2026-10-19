@@ -127,10 +127,10 @@ def test_corner_resize_never_goes_below_the_minimum_height():
 
 def test_crop_rects_split_the_box_at_the_cut():
     box = Box(160, 45, 4800, 1350)
-    left, right = crop_rects(box, QHD, QHD)
+    left, right = crop_rects(box, QHD, QHD, 6000, 3000)
     assert left == (160, 45, 2400, 1350)
     assert right == (2560, 45, 2400, 1350)
-    left, right = crop_rects(box, QHD, UW)
+    left, right = crop_rects(box, QHD, UW, 6000, 3000)
     assert left[2] + right[2] == 4800
     assert left[2] == round(4800 * 2560 / 6000)
 
@@ -150,3 +150,10 @@ def test_monitor_sizes_round_fractional_scales():
 def test_missing_monitors_get_the_default():
     assert monitor_sizes([(0, 0, 1920, 1080, 2.0)]) == ((3840, 2160), DEFAULT_MONITOR)
     assert monitor_sizes([]) == (DEFAULT_MONITOR, DEFAULT_MONITOR)
+
+
+def test_crop_rects_never_pass_the_image_edge():
+    box = Box(5999.6 - 4800.6, 0.4, 4800.6, 1350.4)
+    left, right = crop_rects(box, QHD, QHD, 6000, 1351)
+    assert right[0] + right[2] <= 6000
+    assert left[1] + left[3] <= 1351

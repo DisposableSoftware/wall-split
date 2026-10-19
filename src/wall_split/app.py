@@ -10,9 +10,9 @@ from gi.repository import Gtk, Gdk, Gio, GLib
 from wall_split.pairings import viable_pairings, pairing_index_for_cut, Pairing
 from wall_split.preview import PreviewArea
 from wall_split.dnd import setup_drop_target, load_file
-from wall_split.export import show_export_dialog
+from wall_split.export import crop_parts, show_export_dialog, split_parts
 from wall_split.split import cut_x_for_left_ratio, right_ratio_for_cut
-from wall_split.crop import MAX_MONITOR_SIDE, Box, box_ratio, cut_fraction, fit_box, monitor_sizes, reshape
+from wall_split.crop import MAX_MONITOR_SIDE, Box, box_ratio, crop_rects, cut_fraction, fit_box, monitor_sizes, reshape
 
 
 REJECT_CSS = b".rejected { outline: 3px solid #e01b24; outline-offset: -3px; }"
@@ -249,7 +249,14 @@ class SplitWindow(Gtk.ApplicationWindow):
         )
 
     def _on_export(self, btn):
-        show_export_dialog(self, self.pixbuf, self.cut_x, self.source_w, self.source_h)
+        pixbuf = self.pixbuf
+        if self.mode == "crop" and self.box:
+            monitors = self._monitors()
+            rects = crop_rects(self.box, *monitors, self.source_w, self.source_h)
+            show_export_dialog(self, lambda: crop_parts(pixbuf, rects, monitors))
+        else:
+            cut_x = self.cut_x
+            show_export_dialog(self, lambda: split_parts(pixbuf, cut_x))
 
 
 class WallSplitApp(Gtk.Application):

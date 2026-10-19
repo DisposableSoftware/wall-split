@@ -48,7 +48,7 @@ src/wall_split/crop.py      crop box math and monitor ordering, no GTK          
 src/wall_split/pairings.py  common ratios, the pairing list, dropdown index, no GTK SPLIT-3, SPLIT-4, SPLIT-5, WIN-7
 src/wall_split/dnd.py       drop target, async image load                          WIN-3, WIN-4, WIN-9
 src/wall_split/preview.py   preview drawing area, cut line, crop box              WIN-5, CROP-4
-src/wall_split/export.py    save dialog, PNG writing, error alert                 EXP
+src/wall_split/export.py    save dialog, split and crop parts, PNG writing, alert EXP, CROP-6
 src/wall_split/__main__.py  `python -m wall_split`                                INT-2
 tests/                      pytest unit tests (GTK ones skip without a display)
 tests/assets/               images and impostor files for manual checks (README)

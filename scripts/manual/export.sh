@@ -1,10 +1,11 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p wtype jq grim imagemagick
-# Spec: EXP-1, EXP-2, EXP-3, PROD-4.
+# Spec: EXP-1, EXP-2, EXP-3, PROD-4, CROP-6.
 # Run from the repo root after `nix build`, with no Wall Split windows open. Loads a
 # 5120×1440 image, exports it as wall.png through the save dialog, and compares the two
 # outputs with the source. Then exports into a read-only directory and screenshots the
-# error alert.
+# error alert. Last, in crop mode (headless: the monitors prefill to 3840×2160 and
+# 2560×1440), exports a box from an image whose bands outside the box must not appear.
 cd "$(dirname "$0")/../.." || exit 1
 . scripts/manual/lib.sh
 require_no_instance
@@ -55,6 +56,29 @@ export_to "$T/locked/wall.png"
 shot "$OUT/error.png"
 check "an alert is open (EXP-3)" 2 "$(all_wins | jq length)"
 check "nothing written into the read-only directory" "" "$(ls "$T/locked")"
+
+# Crop mode (CROP-6): red | blue split at x = 3000 between a green top band and a yellow
+# bottom band. The 32:9 box covers rows 656 to 2344, so the left file is all red at the left
+# monitor's size and the right all blue at the right's.
+magick \( -size 6000x600 xc:"#00ff00" \) \( -size 3000x1800 xc:"#ff0000" -size 3000x1800 xc:"#0000ff" +append \) \( -size 6000x600 xc:"#ffff00" \) -append -depth 8 "$T/bands.png"
+mkdir -p "$T/crop"
+cleanup; sleep 0.5
+launch "" "$T/bands.png"
+keys -k Tab -k Tab -k Tab
+keys -k space
+keys -k Tab
+keys -k space
+sleep 1
+check "the save dialog opened in crop mode" 2 "$(all_wins | jq length)"
+dialog_keys -M ctrl a -m ctrl
+dialog_keys "$T/crop/wall.png"
+dialog_keys -k Return
+sleep 2
+check "left is the left monitor's size (CROP-6)" "3840x2160" "$(magick identify -format '%wx%h' "$T/crop/wall-left.png")"
+check "right is the right monitor's size (CROP-6)" "2560x1440" "$(magick identify -format '%wx%h' "$T/crop/wall-right.png")"
+not_colour() { magick "$1" -fuzz 10% -fill black -opaque "$2" -fill white +opaque black -format '%[fx:mean*w*h]' info:; }
+check "left is all red, nothing from outside the box (CROP-6)" 0 "$(not_colour "$T/crop/wall-left.png" "#ff0000")"
+check "right is all blue, nothing from outside the box (CROP-6)" 0 "$(not_colour "$T/crop/wall-right.png" "#0000ff")"
 
 echo "screenshots in $OUT"
 [ "$FAILS" = 0 ]

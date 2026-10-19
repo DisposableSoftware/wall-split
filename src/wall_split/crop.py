@@ -79,10 +79,11 @@ def resize_corner(box: Box, corner: str, dx: float, dy: float, ratio: float, W: 
     return Box(ax - w if left else ax, ay - h if top else ay, w, h)
 
 
-def crop_rects(box: Box, left: tuple[int, int], right: tuple[int, int]):
+def crop_rects(box: Box, left: tuple[int, int], right: tuple[int, int], W: int, H: int):
     """Integer source rectangles (x, y, w, h) for the left and right halves of *box*."""
     x, y = round(box.x), round(box.y)
-    w, h = round(box.w), round(box.h)
+    # Rounding x and w separately can overshoot the edge by a pixel.
+    w, h = min(round(box.w), W - x), min(round(box.h), H - y)
     cut = round(w * cut_fraction(left, right))
     return (x, y, cut, h), (x + cut, y, w - cut, h)
 
