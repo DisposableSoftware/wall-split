@@ -34,8 +34,8 @@ rescaled: every pixel of the source ends up in exactly one of the two outputs.
 - **Export** writes `<name>-left.png` and `<name>-right.png`: in split mode at native
   resolution, in crop mode at your monitors' sizes.
 
-It is early. The preview doesn't scale yet, among other things; [`spec/roadmap.md`](spec/roadmap.md)
-has the honest list.
+It is early. [`spec/roadmap.md`](spec/roadmap.md) has what is planned, and [`spec/`](spec/README.md)
+the honest list of what works.
 
 ## Running
 
