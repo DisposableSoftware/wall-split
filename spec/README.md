@@ -9,6 +9,7 @@ This folder is the source of truth for what Wall Split does. The code implements
 | [product.md](product.md) | `PROD` | Goals, non-goals, platform and stack constraints |
 | [split.md](split.md) | `SPLIT` | The cut: split math, common ratios, pairings |
 | [window.md](window.md) | `WIN` | The window, drag-and-drop, preview and controls |
+| [crop.md](crop.md) | `CROP` | Crop mode: the monitor sizes, the box, and cutting from it |
 | [export.md](export.md) | `EXP` | Writing the two output images |
 | [appearance.md](appearance.md) | `LOOK` | The app icon |
 | [integration.md](integration.md) | `INT` | Nix, launching |
