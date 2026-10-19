@@ -20,6 +20,7 @@ python3Packages.buildPythonApplication {
       ../pyproject.toml
       ../src
       ../tests
+      ../data
     ];
   };
 
@@ -34,6 +35,12 @@ python3Packages.buildPythonApplication {
     gtk4
     gdk-pixbuf
   ];
+
+  postInstall = ''
+    install -Dm644 data/io.github.DisposableSoftware.WallSplit.desktop -t $out/share/applications
+    install -Dm644 data/io.github.DisposableSoftware.WallSplit.svg -t $out/share/icons/hicolor/scalable/apps
+    install -Dm644 data/io.github.DisposableSoftware.WallSplit-symbolic.svg -t $out/share/icons/hicolor/symbolic/apps
+  '';
 
   # wrapGAppsHook4 and the Python wrapper would each wrap the script; fold the GApps
   # environment into the Python wrapper instead.

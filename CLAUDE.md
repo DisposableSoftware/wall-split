@@ -52,7 +52,7 @@ src/wall_split/__main__.py  `python -m wall_split`                              
 tests/                      pytest unit tests (GTK ones skip without a display)
 tests/assets/               images and impostor files for manual checks (README)
 data/                       icons and desktop entry                               LOOK-1, LOOK-2, INT-5
-nix/package.nix             buildPythonApplication, wrapped by wrapGAppsHook4     INT-3
+nix/package.nix             buildPythonApplication, wrapped by wrapGAppsHook4     INT-3, INT-6
 scripts/manual/             UI checks (lib.sh helpers; headless.sh runs one in a headless sway)
   smoke.sh                  window, app ID, opening files                         WIN-1, WIN-2, WIN-9
   preview.sh                preview fits the image, cut line placement           WIN-5
